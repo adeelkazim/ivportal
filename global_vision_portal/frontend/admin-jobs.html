@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Postings - Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>Job Postings <span class="admin-hero-badge">Admin</span></h1>
+                <p>Post internal openings and promotions.</p>
+            </div>
+        </header>
+        <div id="jobAdminMsg" class="message" style="display:none;"></div>
+        <div class="admin-panel">
+            <div class="admin-panel-header">
+                <h2>All postings</h2>
+                <button type="button" class="admin-btn-primary" id="btnAddJob">+ New posting</button>
+            </div>
+            <div class="admin-panel-body admin-ann-grid" id="jobAdminList"></div>
+        </div>
+    </div>
+
+    <div id="jobModal" class="modal" style="display:none;">
+        <div class="modal-content admin-modal admin-modal-pro">
+            <h2 id="jobModalTitle">New job posting</h2>
+            <form id="jobForm">
+                <input type="hidden" id="jobId">
+                <div class="form-group"><label>Job Title *</label><input type="text" id="jobTitle" class="form-control" placeholder="e.g. Software Engineer – Backend" required></div>
+                <div class="form-group"><label>Department / Team *</label><input type="text" id="jobDepartment" class="form-control" placeholder="e.g. Engineering" required></div>
+                <div class="form-group"><label>Employment Type *</label>
+                    <select id="jobEmploymentType" class="form-control" required>
+                        <option value="">— Select type —</option>
+                        <option value="Full-time">Full-time</option>
+                        <option value="Part-time">Part-time</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Project-based">Project-based</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Job Description *</label><textarea id="jobDescription" class="form-control" rows="4" placeholder="Responsibilities, day-to-day tasks, reporting lines…" required></textarea></div>
+                <div class="form-group"><label>Qualifications</label><textarea id="jobQualifications" class="form-control" rows="3" placeholder="Required skills, certifications, or experience…"></textarea></div>
+                <div class="form-group"><label>Application Deadline (optional)</label><input type="datetime-local" id="jobExpiry" class="form-control"></div>
+                <div class="form-group"><label><input type="checkbox" id="jobActive" checked> Active / Visible to employees</label></div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelJob">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recommendations Viewer Modal -->
+    <div id="recsModal" class="modal" style="display:none;">
+        <div class="modal-content admin-modal admin-modal-pro" style="max-width:780px;max-height:85vh;display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <div>
+                    <h2 style="margin:0;" id="recsModalTitle">Recommendations</h2>
+                    <p id="recsModalSub" style="font-size:13px;color:#64748b;margin:4px 0 0;"></p>
+                </div>
+                <button type="button" class="admin-btn-ghost" id="btnCloseRecs" style="padding:6px 12px;">Close</button>
+            </div>
+            <div id="recsBody" style="overflow-y:auto;flex:1;margin-top:12px;">
+                <p style="color:#94a3b8;text-align:center;padding:20px;">Loading…</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/admin-jobs.js"></script>
+</body>
+</html>
+
+

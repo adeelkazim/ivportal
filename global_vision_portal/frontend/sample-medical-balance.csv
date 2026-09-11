@@ -1,0 +1,4 @@
+EmployeeID,EmployeeName,Balance,LoanBalance,LeavesRemaining
+3,Alice Employee,5000,1200,12
+5,FAIZAN ZEESHAN,3500,,21
+9,badarsami,,0,14

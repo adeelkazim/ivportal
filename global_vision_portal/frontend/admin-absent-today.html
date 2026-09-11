@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absent Today — Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <style>
+        .at-header {
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .at-header h1 { font-size: 22px; font-weight: 800; color: #0f172a; margin: 0; flex: 1; }
+
+        .at-controls {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .at-date-input { max-width: 180px; }
+
+        .at-stat {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fee2e2; border-radius: 10px;
+            padding: 10px 20px; margin-bottom: 24px;
+        }
+        .at-stat .num { font-size: 28px; font-weight: 900; color: #dc2626; line-height: 1; }
+        .at-stat .lbl { font-size: 12px; color: #991b1b; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+
+        .at-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+        .at-card {
+            background: #fff; border: 1px solid #fecaca; border-radius: 14px;
+            padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 1px 4px rgba(15,23,42,.05);
+            transition: box-shadow .18s;
+        }
+        .at-card:hover { box-shadow: 0 4px 14px rgba(220,38,38,.1); }
+        .at-avatar {
+            width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+            font-size: 17px; font-weight: 800; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .at-info { flex: 1; min-width: 0; }
+        .at-name { font-size: 14px; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .at-role { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+        .at-meta { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+        .at-badge {
+            font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+            background: #fee2e2; color: #991b1b; white-space: nowrap; flex-shrink: 0;
+        }
+
+        .at-search { max-width: 320px; }
+
+        @media (max-width: 600px) {
+            .at-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="portalLayout"></div>
+    <div class="portal-page-content">
+        <div class="container" style="max-width:1100px;">
+
+            <div class="at-header">
+                <a href="admin-dashboard.html" style="font-size:13px;color:#2555c4;font-weight:600;text-decoration:none;">← Admin Dashboard</a>
+                <h1>Absent Today</h1>
+            </div>
+
+            <div class="at-controls">
+                <input type="date" id="atDatePicker" class="form-control at-date-input">
+                <button type="button" id="atRefreshBtn" class="btn-primary" style="padding:8px 18px;">↻ Refresh</button>
+                <span id="atDateLabel" style="font-size:13px;color:#64748b;font-weight:600;"></span>
+            </div>
+
+            <div class="at-stat" id="atStatBox">
+                <div class="num" id="atCount">—</div>
+                <div class="lbl">Absent Today</div>
+            </div>
+
+            <input type="text" id="atSearch" class="form-control at-search" placeholder="Search by name…" style="margin-bottom:20px;">
+
+            <div id="atMessage" class="message" style="display:none;"></div>
+            <div id="atContainer"><div style="text-align:center;padding:48px;color:#94a3b8;">Loading…</div></div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal. All rights reserved.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-absent-today.js"></script>
+</body>
+</html>

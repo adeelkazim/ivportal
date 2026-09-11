@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Inventory</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Global Vision Portal</div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="profile.html" class="nav-link">Profile</a></li>
+                <li><a href="tasks.html" class="nav-link">Tasks</a></li>
+                <li><a href="inventory.html" class="nav-link active">Inventory</a></li>
+                <li><a href="knowledge-base.html" class="nav-link">Knowledge Base</a></li>
+                <li><a href="#logout" class="nav-link" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Local Inventory</h1>
+            <p id="inventorySubtitle">Track items issued to you</p>
+        </div>
+
+        <div id="adminInventoryPanel" class="admin-panel" style="display: none;">
+            <h2>Admin — Inventory Management <span class="admin-badge">Admin</span></h2>
+
+            <div id="inventoryAdminMessage" class="message" style="display: none;"></div>
+
+            <div class="admin-section">
+                <h3>Add or update item</h3>
+                <form id="inventoryForm">
+                    <input type="hidden" id="editItemId" value="">
+                    <div class="admin-grid">
+                        <div class="form-group">
+                            <label for="formItemName">Item name</label>
+                            <input type="text" id="formItemName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formQuantity">Total quantity</label>
+                            <input type="number" id="formQuantity" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formAvailable">Available quantity</label>
+                            <input type="number" id="formAvailable" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="formStatus">Status</label>
+                            <select id="formStatus" class="form-control">
+                                <option value="Available">Available</option>
+                                <option value="Issued">Issued</option>
+                                <option value="Returned">Returned</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <button type="submit" class="btn-primary" id="saveInventoryBtn">Save item</button>
+                        <button type="button" class="btn-secondary" id="clearInventoryFormBtn">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="admin-section">
+                <h3>Issue inventory to employee</h3>
+                <div class="admin-grid">
+                    <div class="form-group">
+                        <label for="issueItemSelect">Item</label>
+                        <select id="issueItemSelect" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="issueEmployeeSelect">Employee</label>
+                        <select id="issueEmployeeSelect" class="form-control"></select>
+                    </div>
+                </div>
+                <button type="button" class="btn-primary" id="issueInventoryBtn" style="margin-top: 12px;">Issue to employee</button>
+            </div>
+
+            <div class="admin-section">
+                <h3>Upload inventory CSV</h3>
+                <p class="csv-hint">Columns: <code>ItemName</code>, <code>Quantity</code>, <code>AvailableQuantity</code> (optional), <code>Status</code> (optional). Existing items are updated by name.</p>
+                <form id="csvUploadForm">
+                    <input type="file" id="csvFile" accept=".csv,text/csv" class="form-control" style="max-width: 400px;">
+                    <button type="submit" class="btn-primary" style="margin-top: 12px;">Upload CSV</button>
+                </form>
+                <p class="csv-hint"><a href="sample-inventory.csv" download>Download sample CSV</a></p>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="filter-select" 
+                placeholder="Search items..."
+            >
+            <select id="statusFilter" class="filter-select">
+                <option value="">All Items</option>
+                <option value="Issued">Issued to Me</option>
+                <option value="Available">Available</option>
+            </select>
+        </div>
+
+        <table id="inventoryTable" class="table">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Issued To</th>
+                    <th>Issued Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryBody">
+                <tr><td colspan="6" class="text-center">Loading inventory...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Return Item Modal -->
+    <div id="returnModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Return Item</h2>
+            
+            <div class="form-group">
+                <label>Item Name</label>
+                <p id="returnItemName"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="returnDate">Return Date</label>
+                <input type="date" id="returnDate" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="returnNotes">Notes (Optional)</label>
+                <textarea id="returnNotes" class="form-control" rows="4" placeholder="Add any notes..."></textarea>
+            </div>
+
+            <button id="confirmReturnBtn" class="btn-primary">Confirm Return</button>
+            <button id="cancelReturnBtn" class="btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Global Vision Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script src="js/inventory.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+</head>
+<body>
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <div class="page-header profile-page-header">
+            <div class="profile-avatar-wrap">
+                <div class="profile-avatar" id="profileAvatar" title="Profile photo">
+                    <img id="profileAvatarImg" src="" alt="Profile photo" style="display: none;">
+                    <span id="profileAvatarInitials" class="profile-avatar-initials">?</span>
+                </div>
+                <label class="profile-avatar-upload btn-secondary btn-small" for="profileImageInput">Change photo</label>
+                <input type="file" id="profileImageInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+            </div>
+            <div class="profile-header-text">
+                <h1>My Profile</h1>
+                <p id="profileUsernameDisplay" class="profile-username"></p>
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-card">
+                <h2>Personal Information</h2>
+                <form id="profileForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" class="form-control" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <input type="text" id="role" name="role" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact">Contact Number</label>
+                        <input type="tel" id="contact" name="contact" class="form-control" placeholder="+1-234-567-8900">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </form>
+            </div>
+
+            <div class="profile-card" id="workingHoursCard">
+                <h2>⏰ Working Hours</h2>
+                <div id="whDisplay" style="display:flex;gap:32px;flex-wrap:wrap;align-items:center;padding:8px 0;">
+                    <div style="text-align:center;">
+                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#64748b;margin-bottom:6px;">Shift Start</div>
+                        <div id="whStartDisplay" style="font-size:28px;font-weight:800;color:#1e293b;letter-spacing:1px;">—</div>
+                    </div>
+                    <div style="font-size:22px;color:#cbd5e1;align-self:center;">→</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#64748b;margin-bottom:6px;">Shift End</div>
+                        <div id="whEndDisplay" style="font-size:28px;font-weight:800;color:#1e293b;letter-spacing:1px;">—</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#64748b;margin-bottom:6px;">Hours / Day</div>
+                        <div id="whHrsDisplay" style="font-size:28px;font-weight:800;color:#2555c4;">—</div>
+                    </div>
+                </div>
+                <p id="whNotSet" style="color:#94a3b8;font-size:13px;display:none;">Working hours have not been set yet. Contact your admin.</p>
+            </div>
+
+            <div class="profile-card">
+                <h2>Change Password</h2>
+                <form id="passwordForm" class="form">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="currentPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Update Password</button>
+                
+                </form>
+            </div>
+        </div>
+
+        <div id="profileMessage" class="message"></div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Global Vision Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Tasks</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <style>
+        /* ── To Be Started card highlight ── */
+        .task-card-tbs {
+            border-top: 3px solid #10b981;
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 60%);
+        }
+
+        /* ── Play button ── */
+        .task-card-actions {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .task-play-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .15s, box-shadow .15s, background .15s;
+            box-shadow: 0 2px 8px rgba(16,185,129,.30);
+            letter-spacing: .3px;
+        }
+
+        .task-play-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(16,185,129,.40);
+        }
+
+        .task-play-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(16,185,129,.25);
+        }
+
+        /* ── Details button ── */
+        .task-details-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 14px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .task-details-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+            border-color: #cbd5e1;
+        }
+
+        .task-card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>TICKETS</h1>
+        </div>
+
+        <div id="adminTasksPanel" class="admin-panel" style="display: none;">
+            <h2>Assign task <span class="admin-badge" id="assignRoleBadge">Employee</span></h2>
+            <div id="taskAssignMessage" class="message" style="display: none;"></div>
+            <form id="assignTaskForm">
+                <div class="admin-grid">
+                    <div class="form-group">
+                        <label for="assignTitle">Title</label>
+                        <input type="text" id="assignTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignEmployee">Assign to</label>
+                        <select id="assignEmployee" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignPriority">Priority</label>
+                        <select id="assignPriority" class="form-control">
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignDeadline">Deadline</label>
+                        <input type="date" id="assignDeadline" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignTeam">Team <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+                        <select id="assignTeam" class="form-control">
+                            <option value="">— No team —</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignClient">Client <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+                        <select id="assignClient" class="form-control">
+                            <option value="">— No client —</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignProject">Project <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+                        <input type="text" id="assignProject" class="form-control" placeholder="Project name" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="assignStartTime">Start Time <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+                        <input type="time" id="assignStartTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="assignEndTime">End Time <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+                        <input type="time" id="assignEndTime" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 12px;">
+                    <label for="assignDescription">Activity <span style="font-weight:400;color:#94a3b8;">(what the employee will do)</span></label>
+                    <textarea id="assignDescription" class="form-control" rows="3" placeholder="Describe the activity or work required…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="assignNotes">Notes <span style="font-weight:400;color:#94a3b8;">(optional)</span></label>
+                    <textarea id="assignNotes" class="form-control" rows="2" placeholder="Additional notes, instructions, or context…"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 12px;">Assign task</button>
+            </form>
+        </div>
+
+        <div id="taskMessage" class="message" style="display: none;"></div>
+
+        <div class="filter-bar">
+            <select id="statusFilter" class="filter-select">
+                <option value="">All Statuses</option>
+                <option value="To Be Started">To Be Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="On Hold">On Hold</option>
+            </select>
+
+            <select id="priorityFilter" class="filter-select">
+                <option value="">All Priorities</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
+            <select id="employeeFilter" class="filter-select" style="display:none;">
+                <option value="">All Employees</option>
+            </select>
+        </div>
+
+        <div id="tasksContainer" class="tasks-grid">
+            <p class="text-center">Loading tasks...</p>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content" style="max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden;">
+            <!-- Sticky header -->
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 24px 16px;border-bottom:1px solid #e2e8f0;flex-shrink:0;">
+                <h2 id="modalTaskTitle" style="margin:0;font-size:18px;">Task Details</h2>
+                <span class="close" style="font-size:22px;cursor:pointer;color:#94a3b8;line-height:1;padding:4px;">&times;</span>
+            </div>
+
+            <!-- Scrollable body -->
+            <div style="flex:1;overflow-y:auto;padding:20px 24px;">
+                <div class="form-group">
+                    <label>Title</label>
+                    <p id="modalTitle" style="font-weight:600;color:#1e293b;margin:4px 0 0;font-size:16px;"></p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="modalStatus" class="form-control">
+                            <option value="To Be Started">To Be Started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="On Hold">On Hold</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <p id="modalPriority" style="margin:4px 0 0;"></p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Deadline</label>
+                        <p id="modalDeadline" style="margin:4px 0 0;font-weight:600;color:#dc2626;"></p>
+                    </div>
+                    <div id="modalProjectWrap" class="form-group" style="display:none;">
+                        <label>Project</label>
+                        <p id="modalProject" style="margin:4px 0 0;font-weight:600;color:#0369a1;"></p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div id="modalStartTimeWrap" class="form-group" style="display:none;">
+                        <label>Start Time</label>
+                        <p id="modalStartTime" style="margin:4px 0 0;font-weight:600;color:#0f172a;"></p>
+                    </div>
+                    <div id="modalEndTimeWrap" class="form-group" style="display:none;">
+                        <label>End Time</label>
+                        <p id="modalEndTime" style="margin:4px 0 0;font-weight:600;color:#0f172a;"></p>
+                    </div>
+                </div>
+
+                <div id="modalAssignedToWrap" class="form-group" style="display:none;">
+                    <label>Assigned To</label>
+                    <p id="modalAssignedTo" style="margin:4px 0 0;"></p>
+                </div>
+
+                <div id="modalTeamWrap" class="form-group" style="display:none;">
+                    <label>Team</label>
+                    <p id="modalTeam" style="margin:4px 0 0;font-weight:600;color:#1d4ed8;"></p>
+                </div>
+
+                <div id="modalClientWrap" class="form-group" style="display:none;">
+                    <label>Client</label>
+                    <p id="modalClient" style="margin:4px 0 0;font-weight:600;color:#15803d;"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>Activity</label>
+                    <div id="modalDescription" style="white-space:pre-wrap;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;max-height:140px;overflow-y:auto;font-size:13px;line-height:1.6;color:#374151;margin-top:4px;"></div>
+                </div>
+
+                <div id="modalNotesWrap" class="form-group" style="display:none;">
+                    <label>Notes</label>
+                    <div id="modalNotes" style="white-space:pre-wrap;background:#fef8f0;border:1px solid #fed7aa;border-radius:8px;padding:10px 12px;max-height:120px;overflow-y:auto;font-size:13px;line-height:1.6;color:#374151;margin-top:4px;"></div>
+                </div>
+            </div>
+
+            <!-- Sticky footer buttons -->
+            <div style="display:flex;gap:10px;flex-wrap:wrap;padding:16px 24px;border-top:1px solid #e2e8f0;flex-shrink:0;background:#fff;">
+                <button id="modalUpdateBtn" class="btn-primary">Update Status</button>
+                <button id="modalDeleteBtn" class="btn-danger" style="display:none;">Delete Task</button>
+                <button id="modalCloseBtn" class="btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Global Vision Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/tasks.js"></script>
+</body>
+</html>
+
+

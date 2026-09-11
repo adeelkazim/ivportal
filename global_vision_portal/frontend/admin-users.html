@@ -1,0 +1,346 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>👤 User Management <span class="admin-hero-badge">Admin</span></h1>
+                <p>Create and manage portal accounts. Self-registration is disabled — only admins can add users.</p>
+            </div>
+        </header>
+
+        <div class="admin-stats" id="userStats">
+            <div class="admin-stat-card"><div class="label">Total users</div><div class="value" id="statUsers">—</div></div>
+            <div class="admin-stat-card"><div class="label">Active</div><div class="value" id="statUsersActive">—</div></div>
+            <div class="admin-stat-card"><div class="label">Inactive</div><div class="value" id="statUsersInactive">—</div></div>
+        </div>
+
+        <div id="usersMessage" class="message" style="display:none;"></div>
+
+        <!-- ── Team Management ── -->
+        <div class="admin-panel" style="margin-bottom:20px;">
+            <div class="admin-panel-header" style="margin-bottom:16px;">
+                <h2>👥 Team Management</h2>
+                <button type="button" class="admin-btn-primary" id="btnAddTeamUser" style="padding:6px 14px;font-size:12px;">+ New Team</button>
+            </div>
+            <div id="teamListUser" style="min-height:36px;">
+                <p class="text-muted" style="font-size:13px;">Loading…</p>
+            </div>
+            <!-- Inline add row (hidden by default) -->
+            <div id="teamAddRowUser" style="display:none;margin-top:10px;border-top:2px dashed #bfdbfe;padding-top:10px;">
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <input type="text" id="newTeamNameUser" class="form-control"
+                        placeholder="Team name…"
+                        style="flex:1;font-size:13px;padding:7px 10px;">
+                    <button type="button" class="admin-btn-primary" id="confirmTeamUser"
+                        style="padding:6px 14px;font-size:12px;white-space:nowrap;">Add</button>
+                    <button type="button" class="admin-btn-ghost" id="cancelTeamUser"
+                        style="padding:6px 10px;font-size:12px;">✕</button>
+                </div>
+            </div>
+            <div id="teamMsgUser" class="message" style="display:none;margin-top:8px;"></div>
+        </div>
+
+        <!-- ── Client Management ── -->
+        <div class="admin-panel" style="margin-bottom:20px;">
+            <div class="admin-panel-header" style="margin-bottom:16px;">
+                <h2>🏢 Client Management</h2>
+                <button type="button" class="admin-btn-primary" id="btnAddClient" style="padding:6px 14px;font-size:12px;">+ New Client</button>
+            </div>
+            <div id="clientListPanel" style="min-height:36px;">
+                <p class="text-muted" style="font-size:13px;">Loading…</p>
+            </div>
+            <!-- Inline add row (hidden by default) -->
+            <div id="clientAddRow" style="display:none;margin-top:10px;border-top:2px dashed #bfdbfe;padding-top:10px;">
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <input type="text" id="newClientName" class="form-control"
+                        placeholder="Client name…"
+                        style="flex:1;font-size:13px;padding:7px 10px;">
+                    <button type="button" class="admin-btn-primary" id="confirmClient"
+                        style="padding:6px 14px;font-size:12px;white-space:nowrap;">Add</button>
+                    <button type="button" class="admin-btn-ghost" id="cancelClient"
+                        style="padding:6px 10px;font-size:12px;">✕</button>
+                </div>
+            </div>
+            <div id="clientMsg" class="message" style="display:none;margin-top:8px;"></div>
+        </div>
+
+        <!-- ── Manager / TeamLead Team Assignment ── -->
+        <div class="admin-panel" style="margin-bottom:20px;">
+            <div class="admin-panel-header" style="margin-bottom:14px;">
+                <h2>👥 Team Assignments</h2>
+                <p class="csv-hint" style="margin:0;">Assign teams to Managers and Team Leads. They will only see employees from their assigned teams.</p>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+                <select id="mtEmpSelect" class="form-control" style="max-width:280px;">
+                    <option value="">— Select Manager / TeamLead —</option>
+                </select>
+                <button type="button" id="mtLoadBtn" class="btn-primary" style="padding:8px 16px;">Load Teams</button>
+            </div>
+            <div id="mtPanel" style="display:none;">
+                <p style="font-size:13px;color:#64748b;margin-bottom:10px;">Select which teams this person can manage:</p>
+                <div id="mtTeamCheckboxes" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;"></div>
+                <button type="button" id="mtSaveBtn" class="btn-primary" style="padding:8px 20px;">Save Assignments</button>
+                <span id="mtMsg" style="font-size:13px;margin-left:12px;"></span>
+            </div>
+        </div>
+
+        <!-- ── Working Hours ── -->
+        <div class="admin-panel" style="margin-bottom:20px;">
+            <div class="admin-panel-header" style="margin-bottom:16px;">
+                <h2>⏰ Working Hours</h2>
+                <div style="display:flex;gap:8px;">
+                    <button type="button" class="admin-btn-ghost" id="btnWhSample" style="padding:6px 14px;font-size:12px;">⬇ Sample XLSX</button>
+                    <button type="button" class="admin-btn-primary" id="btnWhBulk" style="padding:6px 14px;font-size:12px;">⬆ Bulk Upload</button>
+                </div>
+            </div>
+            <div id="whMsg" class="message" style="display:none;margin-bottom:10px;"></div>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Role</th>
+                            <th>Team</th>
+                            <th>Shift Start</th>
+                            <th>Shift End</th>
+                            <th>Hours/day</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="whTableBody">
+                        <tr><td colspan="8" class="text-center">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="admin-panel-header">
+                <h2>Portal accounts</h2>
+                <div style="display:flex;gap:8px;">
+                    <button type="button" class="admin-btn-ghost" id="btnBulkUpload" style="padding:7px 14px;font-size:13px;">⬆ Bulk Upload</button>
+                    <button type="button" class="admin-btn-primary" id="btnAddUser">+ Add user</button>
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;padding:0 0 14px 0;flex-wrap:wrap;">
+                <input type="text" id="userSearchFilter" class="admin-search" placeholder="Search name, email or username…" style="flex:1;min-width:180px;">
+                <select id="userRoleFilter" class="form-control" style="max-width:160px;">
+                    <option value="">All roles</option>
+                </select>
+                <select id="userStatusFilter" class="form-control" style="max-width:140px;">
+                    <option value="">All statuses</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="admin-panel-body admin-table-wrap">
+                <table class="admin-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th style="cursor:pointer;user-select:none;" id="thId">ID ▲</th>
+                            <th style="cursor:pointer;user-select:none;" id="thName">Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Client</th>
+                            <th>Team</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersBody">
+                        <tr><td colspan="9" class="text-center">Loading…</td></tr>
+                    </tbody>
+                </table>
+                <p id="usersFilterCount" style="font-size:12px;color:var(--text-muted,#6b7280);margin-top:8px;display:none;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Working Hours Bulk Upload Modal -->
+    <div id="whBulkModal" class="modal">
+        <div class="modal-content admin-modal admin-modal-pro" style="max-width:620px;">
+            <h2>⬆ Bulk Upload Working Hours</h2>
+            <p style="font-size:13px;color:#6b7280;margin:4px 0 16px;">Upload an XLSX file with <strong>EmployeeID, ShiftStart, ShiftEnd</strong> columns. Download the sample to see real employee IDs.</p>
+            <div id="whBulkDropZone" style="border:2px dashed #cbd5e1;border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:14px;">
+                <input type="file" id="whBulkFileInput" accept=".xlsx,.xls" style="display:none;">
+                <div id="whBulkDropLabel" style="font-size:14px;color:#64748b;">
+                    <div style="font-size:28px;margin-bottom:8px;">📂</div>
+                    Click to choose XLSX file, or drag &amp; drop here
+                </div>
+            </div>
+            <div id="whBulkPreview" style="display:none;margin-bottom:14px;">
+                <p id="whBulkPreviewCount" style="font-size:13px;color:#374151;font-weight:600;margin:0 0 8px;"></p>
+                <div style="overflow-x:auto;max-height:200px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                        <thead style="position:sticky;top:0;background:#f8fafc;"><tr id="whBulkPreviewHead"></tr></thead>
+                        <tbody id="whBulkPreviewBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="whBulkResults" style="display:none;margin-bottom:14px;">
+                <p id="whBulkResultsSummary" style="font-size:13px;font-weight:600;margin:0 0 8px;"></p>
+                <div style="overflow-x:auto;max-height:200px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                        <thead style="position:sticky;top:0;background:#f8fafc;">
+                            <tr><th style="padding:7px 10px;border-bottom:1px solid #e5e7eb;">Employee</th><th style="padding:7px 10px;border-bottom:1px solid #e5e7eb;">Status</th><th style="padding:7px 10px;border-bottom:1px solid #e5e7eb;">Hours</th></tr>
+                        </thead>
+                        <tbody id="whBulkResultsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="whBulkMsg" class="message" style="display:none;margin-bottom:12px;"></div>
+            <div class="modal-actions">
+                <button type="button" class="admin-btn-ghost" id="btnCancelWhBulk">Close</button>
+                <button type="button" class="admin-btn-primary" id="btnSubmitWhBulk" disabled style="min-width:130px;">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div id="bulkModal" class="modal">
+        <div class="modal-content admin-modal admin-modal-pro" style="max-width:680px;">
+            <h2>⬆ Bulk Upload Users</h2>
+            <p style="font-size:13px;color:#6b7280;margin:4px 0 16px;">Upload an XLSX file to create multiple accounts at once. Required columns: <strong>Name, Email, Password, Role</strong>.</p>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+                <button type="button" id="btnDownloadSample" class="admin-btn-ghost" style="font-size:13px;padding:7px 14px;">⬇ Download Sample XLSX</button>
+                <span style="font-size:12px;color:#9ca3af;">Open the sample file to see all supported columns</span>
+            </div>
+            <div id="bulkDropZone" style="border:2px dashed #cbd5e1;border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:14px;">
+                <input type="file" id="bulkFileInput" accept=".xlsx,.xls" style="display:none;">
+                <div id="bulkDropLabel" style="font-size:14px;color:#64748b;">
+                    <div style="font-size:28px;margin-bottom:8px;">📂</div>
+                    Click to choose XLSX file, or drag &amp; drop here
+                </div>
+            </div>
+            <div id="bulkPreview" style="display:none;margin-bottom:14px;">
+                <p id="bulkPreviewCount" style="font-size:13px;color:#374151;font-weight:600;margin:0 0 8px;"></p>
+                <div style="overflow-x:auto;max-height:220px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;" id="bulkPreviewTable">
+                        <thead style="position:sticky;top:0;background:#f8fafc;">
+                            <tr id="bulkPreviewHead"></tr>
+                        </thead>
+                        <tbody id="bulkPreviewBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="bulkResults" style="display:none;margin-bottom:14px;">
+                <p id="bulkResultsSummary" style="font-size:13px;font-weight:600;margin:0 0 8px;"></p>
+                <div style="overflow-x:auto;max-height:220px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                        <thead style="position:sticky;top:0;background:#f8fafc;">
+                            <tr><th style="padding:7px 10px;text-align:left;border-bottom:1px solid #e5e7eb;">Name</th><th style="padding:7px 10px;text-align:left;border-bottom:1px solid #e5e7eb;">Status</th><th style="padding:7px 10px;text-align:left;border-bottom:1px solid #e5e7eb;">Note</th></tr>
+                        </thead>
+                        <tbody id="bulkResultsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="bulkMsg" class="message" style="display:none;margin-bottom:12px;"></div>
+            <div class="modal-actions">
+                <button type="button" class="admin-btn-ghost" id="btnCancelBulk">Close</button>
+                <button type="button" class="admin-btn-primary" id="btnSubmitBulk" disabled style="min-width:130px;">Upload Users</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content admin-modal admin-modal-pro">
+            <h2 id="userModalTitle">Add user</h2>
+            <form id="userForm">
+                <input type="hidden" id="userFormId">
+
+                <!-- Profile photo -->
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">
+                    <div id="userModalAvatar" style="width:72px;height:72px;border-radius:50%;background:#dbeafe;color:#1e40af;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;overflow:hidden;flex-shrink:0;">
+                        <img id="userModalAvatarImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;">
+                        <span id="userModalAvatarInitials">?</span>
+                    </div>
+                    <div>
+                        <label class="admin-btn-ghost" style="cursor:pointer;padding:6px 14px;font-size:13px;" for="userModalImageInput">Change photo</label>
+                        <input type="file" id="userModalImageInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+                        <p style="font-size:11px;color:#6b7280;margin-top:4px;">JPEG/PNG/WebP · max 2 MB</p>
+                        <div id="userModalImgMsg" style="font-size:12px;display:none;margin-top:2px;"></div>
+                    </div>
+                </div>
+
+                <div class="signup-grid">
+                    <div class="form-group">
+                        <label for="userName">Full name *</label>
+                        <input type="text" id="userName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email *</label>
+                        <input type="email" id="userEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userUsername">Username</label>
+                        <input type="text" id="userUsername" class="form-control" placeholder="Defaults to email prefix">
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password <span id="passwordHint">*</span></label>
+                        <input type="password" id="userPassword" class="form-control" minlength="8">
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="userRole">Role *</label>
+                        <select id="userRole" class="form-control" required></select>
+                    </div> -->
+                    <div class="form-group">
+                        <label for="userClient">Client</label>
+                        <select id="userClient" class="form-control"><option value="">— None —</option></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userTeam">Team</label>
+                        <select id="userTeam" class="form-control"><option value="">— None —</option></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userContact">Contact</label>
+                        <input type="text" id="userContact" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="userDesignation">Designation</label>
+                        <input type="text" id="userDesignation" class="form-control">
+                    </div>
+                 <div class="form-group">
+                        <label for="userRole">Role *</label>
+                        <select id="userRole" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" id="userActive" checked> Active account</label>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelUser">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save user</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="js/admin-users.js"></script>
+</body>
+</html>
+
+

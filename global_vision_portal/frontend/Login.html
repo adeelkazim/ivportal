@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Login</title>
+    <style>
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        display: flex;
+        min-height: 100vh;
+        background: #0f172a;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Left panel ─────────────────────────────────────────── */
+    .login-left {
+        flex: 1;
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1d4ed8 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 60px 64px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* decorative circles */
+    .login-left::before {
+        content: '';
+        position: absolute;
+        top: -120px; right: -120px;
+        width: 420px; height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(59,130,246,.18) 0%, transparent 70%);
+    }
+
+    .login-left::after {
+        content: '';
+        position: absolute;
+        bottom: -80px; left: -80px;
+        width: 320px; height: 320px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(16,185,129,.12) 0%, transparent 70%);
+    }
+
+    /* floating shape accents */
+    .shape {
+        position: absolute;
+        border-radius: 50%;
+        opacity: .07;
+        pointer-events: none;
+    }
+    .shape-1 { width: 200px; height: 200px; background: #3b82f6; top: 10%; left: 60%; animation: drift 8s ease-in-out infinite; }
+    .shape-2 { width: 140px; height: 140px; background: #10b981; bottom: 20%; right: 10%; animation: drift 11s ease-in-out infinite reverse; }
+    .shape-3 { width: 90px;  height: 90px;  background: #f59e0b; top: 55%; left: 15%; animation: drift 14s ease-in-out infinite 2s; }
+
+    @keyframes drift {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50%       { transform: translateY(-22px) scale(1.05); }
+    }
+
+    /* brand */
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .brand-icon {
+        width: 52px; height: 52px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(59,130,246,.45);
+        flex-shrink: 0;
+    }
+
+    .brand-icon svg {
+        width: 28px; height: 28px;
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .brand-name {
+        font-size: 28px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -.4px;
+        line-height: 1.2;
+    }
+
+    .brand-sub {
+        font-size: 12px;
+        color: #93c5fd;
+        font-weight: 500;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+
+    /* headline */
+    .left-headline {
+        font-size: 42px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.15;
+        letter-spacing: -1.2px;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .left-headline .highlight {
+        background: linear-gradient(90deg, #60a5fa, #34d399);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* typewriter */
+    .typewriter-wrap {
+        position: relative;
+        z-index: 1;
+        min-height: 60px;
+        margin-bottom: 40px;
+    }
+
+    .typewriter-text {
+        font-size: 16px;
+        color: #94a3b8;
+        line-height: 1.7;
+        max-width: 440px;
+    }
+
+    .typewriter-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        background: #60a5fa;
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: blink .75s step-end infinite;
+    }
+
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+
+    /* feature pills */
+    .feature-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .pill {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(255,255,255,.07);
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 100px;
+        padding: 7px 16px;
+        color: #cbd5e1;
+        font-size: 13px;
+        font-weight: 500;
+        backdrop-filter: blur(6px);
+        transition: all .2s ease;
+    }
+
+    .pill:hover {
+        background: rgba(255,255,255,.12);
+        color: #fff;
+    }
+
+    .pill-dot {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    /* ── Right panel ─────────────────────────────────────────── */
+    .login-right {
+        width: 480px;
+        flex-shrink: 0;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 40px;
+        position: relative;
+    }
+
+    .login-right::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 1px; height: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(59,130,246,.3), transparent);
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 380px;
+    }
+
+    .login-card-header {
+        margin-bottom: 32px;
+        text-align: left;
+    }
+
+    .login-card-header .eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: #3b82f6;
+        margin-bottom: 8px;
+    }
+
+    .login-card-header h2 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+        letter-spacing: -.6px;
+        line-height: 1.2;
+        margin-bottom: 8px;
+    }
+
+    .login-card-header p {
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    /* form */
+    .form-group { margin-bottom: 20px; }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 7px;
+    }
+
+    .input-wrap {
+        position: relative;
+    }
+
+    .input-wrap svg {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 17px; height: 17px;
+        stroke: #9ca3af;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        pointer-events: none;
+    }
+
+    .input-wrap input {
+        width: 100%;
+        padding: 12px 14px 12px 42px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #0f172a;
+        background: #fff;
+        transition: border-color .18s ease, box-shadow .18s ease;
+        font-family: inherit;
+        outline: none;
+    }
+
+    .input-wrap input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+    }
+
+    .input-wrap input::placeholder { color: #9ca3af; }
+
+    /* password toggle */
+    .pw-toggle {
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 2px;
+        color: #9ca3af;
+        display: flex;
+        align-items: center;
+        transition: color .15s;
+    }
+
+    .pw-toggle:hover { color: #475569; }
+
+    .pw-toggle svg {
+        position: static;
+        transform: none;
+        width: 17px; height: 17px;
+        stroke: currentColor;
+        stroke-width: 1.8;
+    }
+
+    /* remember + forgot row */
+    .form-row-split {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #475569;
+        cursor: pointer;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        width: 16px; height: 16px;
+        accent-color: #3b82f6;
+        cursor: pointer;
+    }
+
+    .forgot-link {
+        font-size: 13px;
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color .15s;
+    }
+
+    .forgot-link:hover { color: #1d4ed8; text-decoration: underline; }
+
+    /* submit button */
+    .btn-login {
+        width: 100%;
+        padding: 13px;
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: .1px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(29,78,216,.4);
+        transition: all .2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-login:hover {
+        background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+        box-shadow: 0 8px 24px rgba(29,78,216,.5);
+        transform: translateY(-1px);
+    }
+
+    .btn-login:active { transform: translateY(0); }
+
+    .btn-login:disabled {
+        opacity: .7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* message */
+    .login-message {
+        margin-top: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        display: none;
+        border: 1px solid transparent;
+    }
+
+    .login-message.error   { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .login-message.success { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+
+    /* footer */
+    .login-footer {
+        text-align: center;
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    /* ── Company mail card ───────────────────────────────────── */
+    .mail-card {
+        position: relative;
+        z-index: 1;
+        margin-top: 36px;
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 18px;
+        padding: 22px 24px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        max-width: 420px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all .25s ease;
+        overflow: hidden;
+    }
+
+    .mail-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg,
+            rgba(59,130,246,.08) 0%,
+            rgba(16,185,129,.06) 100%);
+        opacity: 0;
+        transition: opacity .25s ease;
+    }
+
+    .mail-card:hover {
+        background: rgba(255,255,255,.1);
+        border-color: rgba(255,255,255,.22);
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(0,0,0,.25);
+    }
+
+    .mail-card:hover::before { opacity: 1; }
+
+    /* Animated glow ring behind icon */
+    .mail-icon-wrap {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .mail-icon-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, #3b82f6, #06b6d4, #10b981, #3b82f6);
+        animation: spinGlow 4s linear infinite;
+        opacity: .5;
+        filter: blur(4px);
+    }
+
+    @keyframes spinGlow {
+        to { transform: rotate(360deg); }
+    }
+
+    .mail-icon {
+        position: relative;
+        width: 52px;
+        height: 52px;
+        background: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(14,165,233,.4);
+        z-index: 1;
+    }
+
+    .mail-icon svg {
+        width: 24px;
+        height: 24px;
+        fill: none;
+        stroke: #fff;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .mail-card-text { flex: 1; min-width: 0; }
+
+    .mail-card-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: #60a5fa;
+        margin-bottom: 4px;
+    }
+
+    .mail-card-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -.2px;
+        margin-bottom: 3px;
+    }
+
+    .mail-card-domain {
+        font-size: 12px;
+        color: rgba(255,255,255,.5);
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mail-card-arrow {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        background: rgba(255,255,255,.08);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .2s ease;
+    }
+
+    .mail-card:hover .mail-card-arrow {
+        background: rgba(255,255,255,.18);
+        transform: translateX(3px);
+    }
+
+    .mail-card-arrow svg {
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: rgba(255,255,255,.7);
+        stroke-width: 2.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* Unread badge */
+    .mail-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: linear-gradient(135deg, #ef4444, #f97316);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 2px 7px;
+        border-radius: 20px;
+        letter-spacing: .3px;
+        animation: badgePop .4s cubic-bezier(.36,.07,.19,.97);
+    }
+
+    @keyframes badgePop {
+        0%  { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.15); }
+        100%{ transform: scale(1);  opacity: 1; }
+    }
+
+    /* ── Webmail card (right panel) ─────────────────────────── */
+    .webmail-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 22px;
+        padding: 16px 18px;
+        background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%);
+        border-radius: 14px;
+        text-decoration: none;
+        box-shadow: 0 8px 28px rgba(5,150,105,.3);
+        transition: all .22s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .webmail-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -80%;
+        width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+        transition: left .5s ease;
+        pointer-events: none;
+    }
+
+    .webmail-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 36px rgba(5,150,105,.45);
+    }
+
+    .webmail-card:hover::before { left: 160%; }
+
+    .webmail-card-icon {
+        width: 42px; height: 42px;
+        background: rgba(255,255,255,.18);
+        border-radius: 11px;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        backdrop-filter: blur(6px);
+        transition: transform .2s ease;
+    }
+
+    .webmail-card:hover .webmail-card-icon { transform: scale(1.1) rotate(-4deg); }
+
+    .webmail-card-icon svg { width: 20px; height: 20px; }
+
+    .webmail-card-body {
+        flex: 1;
+        display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .webmail-card-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -.1px;
+    }
+
+    .webmail-card-url {
+        font-size: 11px;
+        color: rgba(255,255,255,.65);
+        font-weight: 500;
+    }
+
+    .webmail-card-cta {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(255,255,255,.9);
+        background: rgba(255,255,255,.15);
+        padding: 6px 12px;
+        border-radius: 20px;
+        white-space: nowrap;
+        transition: background .2s ease;
+        flex-shrink: 0;
+    }
+
+    .webmail-card:hover .webmail-card-cta { background: rgba(255,255,255,.25); }
+
+    /* ── Dual login options ──────────────────────────────────── */
+    .login-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 28px;
+    }
+
+    .login-option {
+        position: relative;
+        border-radius: 14px;
+        padding: 16px 14px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all .22s ease;
+        overflow: hidden;
+        border: 2px solid transparent;
+    }
+
+    /* Portal option — blue, active */
+    .login-option.portal {
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+        border-color: #3b82f6;
+        box-shadow: 0 8px 24px rgba(29,78,216,.35);
+    }
+
+    .login-option.portal:hover {
+        box-shadow: 0 12px 32px rgba(29,78,216,.5);
+        transform: translateY(-2px);
+    }
+
+    /* Mail option — teal/emerald */
+    .login-option.mail {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        border-color: #10b981;
+        box-shadow: 0 8px 24px rgba(16,185,129,.3);
+    }
+
+    .login-option.mail:hover {
+        box-shadow: 0 12px 32px rgba(16,185,129,.45);
+        transform: translateY(-2px);
+    }
+
+    /* Shimmer sweep on hover */
+    .login-option::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+        transition: left .4s ease;
+        pointer-events: none;
+    }
+
+    .login-option:hover::before { left: 160%; }
+
+    .login-opt-icon {
+        width: 38px; height: 38px; border-radius: 10px;
+        background: rgba(255,255,255,.18);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 10px;
+        backdrop-filter: blur(4px);
+        transition: transform .2s ease;
+    }
+
+    .login-option:hover .login-opt-icon { transform: scale(1.1); }
+
+    .login-opt-icon svg {
+        width: 19px; height: 19px;
+        fill: none; stroke: #fff;
+        stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .login-opt-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255,255,255,.7);
+        margin-bottom: 3px;
+    }
+
+    .login-opt-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -.1px;
+        line-height: 1.3;
+    }
+
+    .login-opt-badge {
+        position: absolute;
+        top: 8px; right: 8px;
+        background: rgba(255,255,255,.22);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 20px;
+        letter-spacing: .3px;
+        text-transform: uppercase;
+    }
+
+    .portal .login-opt-badge { background: rgba(255,255,255,.25); }
+    .mail   .login-opt-badge { background: rgba(255,255,255,.2); }
+
+    /* ── Divider ──────────────────────────────────────────────── */
+    .form-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 4px 0 22px;
+        color: #cbd5e1;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+    }
+    .form-divider::before, .form-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e2e8f0;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+        body { flex-direction: column; }
+
+        .login-left {
+            padding: 48px 32px 40px;
+            min-height: 320px;
+        }
+
+        .left-headline { font-size: 30px; }
+
+        .login-right {
+            width: 100%;
+            padding: 40px 24px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .login-left { padding: 36px 24px 32px; }
+        .left-headline { font-size: 24px; }
+        .feature-pills { display: none; }
+        .login-right { padding: 32px 20px; }
+    }
+    </style>
+</head>
+<body>
+
+    <!-- ── Left panel ─────────────────────────────────────── -->
+    <div class="login-left">
+
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+
+        <!-- Brand -->
+        <div class="brand-logo">
+            <div class="brand-icon" style="background:transparent;border:none;box-shadow:none;padding:0;">
+                <img src="images/logo.png" alt="Global Vision Logo" style="width:75px;height:75px;object-fit:contain;">
+            </div>
+            <div>
+                <div class="brand-name">Global Vision</div>
+                <div class="brand-sub">Employee Portal</div>
+            </div>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="left-headline">
+            One platform.<br>
+            <span class="highlight">Complete visibility.</span>
+        </h1>
+
+        <!-- Typewriter -->
+        <div class="typewriter-wrap">
+            <p class="typewriter-text">
+                <span id="typewriterOutput"></span><span class="typewriter-cursor"></span>
+            </p>
+        </div>
+
+        <!-- Feature pills -->
+        <div class="feature-pills">
+            <div class="pill"><div class="pill-dot" style="background:#34d399;"></div>Attendance Tracking</div>
+            <div class="pill"><div class="pill-dot" style="background:#60a5fa;"></div>Task Management</div>
+            <div class="pill"><div class="pill-dot" style="background:#f59e0b;"></div>Inventory Control</div>
+            <div class="pill"><div class="pill-dot" style="background:#a78bfa;"></div>Team Announcements</div>
+            <div class="pill"><div class="pill-dot" style="background:#fb7185;"></div>HR & Feedback</div>
+        </div>
+
+        <!-- Company mail card -->
+        <a class="mail-card" href="https://webmail-just2029.justhost.com/" target="_blank" rel="noopener noreferrer">
+            <div class="mail-icon-wrap">
+                <div class="mail-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="mail-card-text">
+                <div class="mail-card-label">Quick Access</div>
+                <div class="mail-card-title">Global Vision Mail</div>
+                <div class="mail-card-domain">email.Inner-VisionInc.com</div>
+            </div>
+            <div class="mail-card-arrow">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+            <span class="mail-badge">Webmail</span>
+        </a>
+
+    </div>
+
+    <!-- ── Right panel ────────────────────────────────────── -->
+    <div class="login-right">
+        <div class="login-card">
+
+            <div class="login-card-header">
+                <p class="eyebrow"></p>
+                <h2>Intranet Portal Login</h2>
+                <p>Enter your credentials to access the portal</p>
+            </div>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+                    <label for="email">Email or Username</label>
+                    <div class="input-wrap">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+                        <input
+                            type="text"
+                            id="email"
+                            name="email"
+                            placeholder="you@company.com"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="••••••••"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+                            <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row-split">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        Remember me
+                    </label>
+                    <a href="#forgot-password" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Sign In
+                </button>
+
+                <div id="loginMessage" class="login-message"></div>
+
+            </form>
+
+            <!-- ── Webmail card ── -->
+            <a class="webmail-card" href="https://webmail-just2029.justhost.com/" target="_blank" rel="noopener noreferrer">
+                <div class="webmail-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                </div>
+                <div class="webmail-card-body">
+                    <span class="webmail-card-title">Global Vision Mail</span>
+                    <span class="webmail-card-url">email.Inner-VisionInc.com</span>
+                </div>
+                <div class="webmail-card-cta">
+                    Open Webmail
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </div>
+            </a>
+
+            <div class="login-footer">
+                &copy; 2026 Global Vision Portal &nbsp;·&nbsp; All rights reserved
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/login.js"></script>
+    <script>
+    // ── Typewriter ────────────────────────────────────────────
+    (function () {
+        const lines = [
+            'Empowering teams with real-time insights and seamless workforce management.',
+            'Track attendance, assign tasks, manage inventory — all in one place.',
+            'Built for modern organizations that value transparency and efficiency.',
+            'Stay connected with your team through announcements and instant updates.',
+            'From HR management to project tracking, we have it covered.',
+        ];
+
+        const el = document.getElementById('typewriterOutput');
+        let lineIdx = 0, charIdx = 0, deleting = false;
+        const SPEED_TYPE = 42, SPEED_DEL = 20, PAUSE_END = 2200, PAUSE_START = 380;
+
+        function tick() {
+            const line = lines[lineIdx];
+            if (!deleting) {
+                el.textContent = line.slice(0, ++charIdx);
+                if (charIdx === line.length) {
+                    deleting = true;
+                    return setTimeout(tick, PAUSE_END);
+                }
+                return setTimeout(tick, SPEED_TYPE);
+            } else {
+                el.textContent = line.slice(0, --charIdx);
+                if (charIdx === 0) {
+                    deleting = false;
+                    lineIdx = (lineIdx + 1) % lines.length;
+                    return setTimeout(tick, PAUSE_START);
+                }
+                return setTimeout(tick, SPEED_DEL);
+            }
+        }
+
+        setTimeout(tick, 600);
+    })();
+    
+
+    // ── Password toggle ────────────────────────────────────────
+    document.getElementById('pwToggle').addEventListener('click', function () {
+        const pw = document.getElementById('password');
+        const isText = pw.type === 'text';
+        pw.type = isText ? 'password' : 'text';
+        document.getElementById('eyeIcon').innerHTML = isText
+            ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+            : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/>';
+    });
+    </script>
+    <script>
+</script>
+
+</body>
+</html>

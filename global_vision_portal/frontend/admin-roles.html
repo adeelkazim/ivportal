@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles & Screens - Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1> Roles & Screens <span class="admin-hero-badge">Admin</span></h1>
+                <p>Define roles and control which pages each role can access in the portal.</p>
+            </div>
+        </header>
+
+        <div id="rolesMessage" class="message" style="display:none;"></div>
+
+        <!-- ── Teams panel ── -->
+        <!-- <div style="margin-bottom:24px;">
+            <div class="admin-panel">
+                <div class="admin-panel-header" style="margin-bottom:16px;">
+                    <h2 style="margin:0;">👥 Teams</h2>
+                    <button type="button" class="admin-btn-primary" id="btnAddTeam" style="padding:6px 14px;font-size:12px;">+ Add</button>
+                </div>
+                <div id="teamList" style="min-height:40px;">
+                    <p class="text-muted" style="font-size:13px;">Loading…</p>
+                </div>
+                <div id="teamInlineAdd" style="display:none;margin-top:10px;">
+                    <div style="display:flex;gap:8px;margin-top:10px;border-top:2px dashed #bfdbfe;padding-top:10px;">
+                        <input type="text" id="newTeamName" class="form-control" placeholder="Team name…" style="flex:1;font-size:13px;padding:7px 10px;">
+                        <button type="button" class="admin-btn-primary" id="confirmAddTeam" style="padding:6px 14px;font-size:12px;white-space:nowrap;">Add</button>
+                        <button type="button" class="admin-btn-ghost" id="cancelAddTeam" style="padding:6px 10px;font-size:12px;">✕</button>
+                    </div>
+                </div>
+                <div id="teamMessage" class="message" style="display:none;margin-top:8px;"></div>
+            </div>
+        </div> -->
+
+        <div class="admin-split">
+            <aside class="admin-sidebar-card">
+                <div class="admin-panel-header">
+                    <h2>Roles</h2>
+                    <button type="button" class="admin-btn-primary" style="padding:6px 12px;font-size:0.8rem;" id="btnAddRole">+ New</button>
+                </div>
+                <div class="admin-list-scroll">
+                    <ul id="roleList" class="admin-emp-list" style="list-style:none;margin:0;padding:0;">
+                        <li class="text-muted" style="padding:12px;">Loading…</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="admin-detail-card" id="roleDetailPanel">
+                <div class="admin-empty">
+                    <div class="admin-empty-icon"></div>
+                    <p>Select a role to manage screen access</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Create role modal -->
+    <div id="roleModal" class="modal">
+        <div class="modal-content admin-modal admin-modal-pro">
+            <h2>Create role</h2>
+            <form id="roleForm">
+                <div class="form-group">
+                    <label for="roleName">Role name *</label>
+                    <input type="text" id="roleName" class="form-control" required placeholder="e.g. HR, Supervisor">
+                </div>
+                <div class="form-group">
+                    <label for="roleDesc">Description</label>
+                    <input type="text" id="roleDesc" class="form-control" placeholder="Short description">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelRole">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Create role</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit role modal -->
+    <div id="editRoleModal" class="modal">
+        <div class="modal-content admin-modal admin-modal-pro">
+            <h2>Edit role</h2>
+            <input type="hidden" id="editRoleId">
+            <form id="editRoleForm">
+                <div class="form-group">
+                    <label for="editRoleName">Role name *</label>
+                    <input type="text" id="editRoleName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editRoleDesc">Description</label>
+                    <input type="text" id="editRoleDesc" class="form-control" placeholder="Short description">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelEditRole">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/admin-roles.js"></script>
+</body>
+</html>
+
+

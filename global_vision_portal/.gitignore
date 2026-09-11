@@ -1,0 +1,103 @@
+# .gitignore - Global Vision Portal
+
+# ===== Environment & Configuration =====
+.env
+.env.local
+.env.*.local
+.DS_Store
+
+# ===== Node.js =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# ===== IDE & Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.sublime-workspace
+*.sublime-project
+
+# ===== OS Files =====
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+.TemporaryItems
+.VolumeIcon.icns
+
+# ===== Logs =====
+logs/
+*.log
+npm-debug.log*
+
+# ===== Build Output =====
+dist/
+build/
+.next/
+.nuxt/
+coverage/
+.nyc_output/
+
+# ===== Database Backups =====
+*.bak
+*.backup
+*.db
+*.sqlite
+
+# ===== Sensitive Files =====
+private/
+secrets/
+keys/
+*.pem
+*.key
+
+# ===== Testing =====
+.coverage/
+.pytest_cache/
+test-results/
+
+# ===== Package Manager =====
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ===== IDE Specific =====
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/*
+
+# ===== OS Temporary =====
+*.tmp
+*.temp
+$RECYCLE.BIN/
+
+# ===== Application Specific =====
+# Ignore compiled/generated files
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# Frontend cache
+.cache/
+frontend/.cache/
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/dist/
+
+# Database
+database/backup/
+database/logs/

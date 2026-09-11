@@ -1,0 +1,382 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <style>
+        /* ── Employee task log cards ─────────────────────────── */
+        .emp-log-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(15,23,42,.06);
+            margin-bottom: 16px;
+        }
+        .emp-log-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: linear-gradient(135deg,#f8faff,#eef2ff);
+            border-bottom: 1px solid #e2e8f0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .emp-log-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg,#3b82f6,#2555c4);
+            color: #fff;
+            font-size: 15px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .emp-log-name { font-size: 14px; font-weight: 700; color: #0f172a; }
+        .emp-log-meta { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+        .emp-log-chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .emp-chip {
+            font-size: 11px; font-weight: 700;
+            padding: 3px 10px; border-radius: 20px;
+            white-space: nowrap;
+        }
+        .chip-total   { background: #f1f5f9; color: #475569; }
+        .chip-running { background: #dbeafe; color: #1e40af; }
+        .chip-done    { background: #dcfce7; color: #166534; }
+        .chip-pending { background: #fef3c7; color: #92400e; }
+
+        /* ── Task rows table inside each card ───────────────── */
+        .emp-task-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .emp-task-table th {
+            background: #f8fafc;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            color: #64748b;
+            padding: 8px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .emp-task-table {
+            table-layout: fixed;
+        }
+        .emp-task-table td {
+            padding: 10px 14px;
+            color: #1e293b;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+            word-break: break-word;
+            white-space: normal;
+        }
+        .emp-task-table tr:last-child td { border-bottom: none; }
+        .emp-task-table tr:hover td { background: #fafbff; }
+        .task-activity-text {
+            font-weight: 600;
+            color: #0f172a;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .task-notes-text {
+            font-size: 11.5px;
+            color: #64748b;
+            margin-top: 4px;
+            line-height: 1.5;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        /* ── Status pills ────────────────────────────────────── */
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; white-space: nowrap;
+        }
+        .status-completed   { background: #dcfce7; color: #166534; }
+        .status-in-progress { background: #dbeafe; color: #1e40af; }
+        .status-on-hold     { background: #fef3c7; color: #92400e; }
+        .status-delayed     { background: #fee2e2; color: #991b1b; }
+        .status-pending     { background: #f1f5f9; color: #475569; }
+
+        .time-cell { font-variant-numeric: tabular-nums; white-space: nowrap; color: #475569; }
+        .dur-badge {
+            display: inline-block;
+            background: #f0f9ff; color: #0369a1;
+            font-size: 11px; font-weight: 700;
+            padding: 2px 8px; border-radius: 12px;
+        }
+        .exp-tab-btn {
+            padding: 8px 18px; font-size: 13px; font-weight: 600;
+            border: none; background: none; cursor: pointer;
+            color: #64748b; border-bottom: 2px solid transparent; margin-bottom: -2px;
+        }
+        .exp-tab-active { color: #2555c4; border-bottom-color: #2555c4; }
+
+        /* Two-mode (Single / All) tabs */
+        .adm-mode-tabs {
+            display: flex; gap: 6px; margin-bottom: 18px;
+            background: #f1f5f9; border-radius: 10px; padding: 4px; width: fit-content;
+        }
+        .adm-mode-tab {
+            padding: 7px 20px; font-size: 13px; font-weight: 600;
+            border: none; border-radius: 7px; cursor: pointer;
+            background: transparent; color: #64748b; transition: all .18s;
+        }
+        .adm-mode-active {
+            background: #fff; color: #1e40af;
+            box-shadow: 0 1px 4px rgba(15,23,42,.1);
+        }
+
+        /* Secondary / outline button */
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 8px 16px; font-size: 13px; font-weight: 600;
+            border-radius: 8px; cursor: pointer; white-space: nowrap;
+            border: 1.5px solid #cbd5e1; background: #fff; color: #334155;
+            transition: background .15s, border-color .15s;
+        }
+        .btn-secondary:hover { background: #f8fafc; border-color: #94a3b8; }
+        .btn-secondary:disabled { opacity: .5; cursor: default; }
+
+        /* Attendance / employee summary tables */
+        .adm-summary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .adm-summary-table th {
+            background: #f8fafc; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .5px; color: #64748b;
+            padding: 9px 14px; text-align: left; border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .adm-summary-table td { padding: 9px 14px; color: #1e293b; border-bottom: 1px solid #f1f5f9; }
+        .adm-summary-table tr:last-child td { border: none; }
+        .adm-summary-table tr:hover td { background: #fafbff; }
+        .adm-badge-present { display:inline-block; background:#dcfce7; color:#166534; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px; }
+        .adm-badge-absent  { display:inline-block; background:#fee2e2; color:#991b1b; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px; }
+        .adm-badge-partial { display:inline-block; background:#fef3c7; color:#92400e; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <div class="dashboard-header animate-fade-in admin-dashboard-header">
+            <h1>Administrator Dashboard</h1>
+            <p>Signed in as <strong id="adminUserName">Admin</strong></p>
+            <p class="csv-hint">This area is separate from the employee portal. Employees use their own dashboard, tasks, and inventory.</p>
+        </div>
+
+        <section class="dashboard-grid admin-dashboard-grid">
+            <a href="admin-employees.html" class="stat-card dashboard-quick-link">
+                <h3>Total Employees</h3>
+                <p id="statEmployees" class="stat-value">—</p>
+                <p class="csv-hint">View all records →</p>
+            </a>
+            <a href="admin-present-today.html" class="stat-card dashboard-quick-link" style="cursor:pointer;">
+                <h3>Present Today</h3>
+                <p id="statPresent" class="stat-value">—</p>
+                <p class="csv-hint">View who's in →</p>
+            </a>
+            <a href="admin-absent-today.html" class="stat-card dashboard-quick-link" style="cursor:pointer;">
+                <h3>Absent Today</h3>
+                <p id="statAbsent" class="stat-value" style="color:#dc2626;">—</p>
+                <p class="csv-hint">View absent list →</p>
+            </a>
+            <a href="admin-late-today.html" class="stat-card dashboard-quick-link" style="cursor:pointer;">
+                <h3>Late Employees</h3>
+                <p id="statLate" class="stat-value" style="color:#d97706;">—</p>
+                <p class="csv-hint">View &amp; add remarks →</p>
+            </a>
+            <div class="stat-card">
+                <h3>Pending Tasks</h3>
+                <p id="statTasks" class="stat-value">—</p>
+                <p class="csv-hint">Across all employees</p>
+            </div>
+            <div class="stat-card">
+                <h3>Open Feedback</h3>
+                <p id="statFeedback" class="stat-value">—</p>
+                <p class="csv-hint">Unresolved items</p>
+            </div>
+            <div class="stat-card">
+                <h3>Inventory Items</h3>
+                <p id="statInventory" class="stat-value">—</p>
+                <p class="csv-hint">Currently issued</p>
+            </div>
+            <a href="admin-announcements.html" class="stat-card dashboard-quick-link">
+                <h3>Announcements</h3>
+                <p id="statAnnouncements" class="stat-value">—</p>
+                <p class="csv-hint">Manage →</p>
+            </a>
+        </section>
+
+        <!-- ── Admin Attendance Widget ── -->
+        <div class="admin-panel" style="max-width:480px;">
+            <h2>My Attendance <span class="admin-badge">Admin</span></h2>
+            <p class="csv-hint">Clock in/out for your own attendance record.</p>
+            <div id="adminAttWidget" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:10px;">
+                <div>
+                    <p id="adminAttStatus" style="font-size:14px;font-weight:600;color:#64748b;margin:0;">Checking…</p>
+                    <p id="adminAttTime" style="font-size:12px;color:#94a3b8;margin:4px 0 0;"></p>
+                </div>
+                <button id="adminAttBtn" class="btn-primary" style="min-width:110px;" disabled>…</button>
+            </div>
+            <div id="adminAttMsg" class="message" style="display:none;margin-top:10px;"></div>
+        </div>
+
+        <!-- ── Employee Daily Tasks ── -->
+        <div class="admin-panel">
+            <h2>Employee Daily Tasks <span class="admin-badge">Admin</span></h2>
+            <p class="csv-hint">View work logs submitted by all employees.</p>
+
+            <!-- Tabs -->
+            <div style="display:flex;gap:0;margin-bottom:16px;border-bottom:2px solid #e2e8f0;">
+                <button id="logsTabToday" type="button"
+                    style="padding:8px 20px;font-size:13px;font-weight:700;border:none;background:none;cursor:pointer;color:#2555c4;border-bottom:2px solid #2555c4;margin-bottom:-2px;">
+                    Today
+                </button>
+                <button id="logsTabHistory" type="button"
+                    style="padding:8px 20px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;color:#64748b;border-bottom:2px solid transparent;margin-bottom:-2px;">
+                    History
+                </button>
+            </div>
+
+            <!-- History filters (hidden by default) -->
+            <div id="logsHistoryFilters" style="display:none;display:none;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;">
+                <input type="date" id="logsDateFilter" class="form-control" style="max-width:180px;">
+                <select id="logsEmpFilter" class="form-control" style="max-width:260px;">
+                    <option value="">— All employees —</option>
+                </select>
+                <button type="button" class="btn-primary" id="logsFilterBtn" style="padding:8px 18px;">Apply</button>
+            </div>
+
+            <div id="logsAdminMsg" class="message" style="display:none;margin-bottom:10px;"></div>
+            <div class="admin-logs-grid" id="logsAdminContainer" style="min-height:60px;">
+                <div style="text-align:center;padding:40px;color:#94a3b8;">Loading…</div>
+            </div>
+        </div>
+
+        <!-- ══ Employee Records ══ -->
+        <div class="admin-panel">
+            <h2>Employee Records <span class="admin-badge">Admin</span></h2>
+            <div class="adm-mode-tabs">
+                <button class="adm-mode-tab adm-mode-active" id="empModeTabSingle">Single Employee</button>
+                <button class="adm-mode-tab" id="empModeTabAll">All Employees</button>
+            </div>
+
+            <!-- Single employee -->
+            <div id="empModeSingle">
+                <p class="csv-hint">Select an employee to view their full profile, attendance history, tasks, and inventory. You can also export their record as XLSX.</p>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+                    <select id="empDropdown" class="form-control" style="max-width:340px;">
+                        <option value="">— Select an employee —</option>
+                    </select>
+                    <button type="button" id="exportSingleEmpBtn" class="btn-secondary" style="display:none;">
+                        ⬇ Export This Employee
+                    </button>
+                </div>
+                <div id="exportSingleEmpMsg" class="message" style="display:none;margin-top:8px;"></div>
+                <div id="empDetailPanel" style="display:none;margin-top:24px;"></div>
+            </div>
+
+            <!-- All employees -->
+            <div id="empModeAll" style="display:none;">
+                <p class="csv-hint">Overview of all employees. Search by name, role, or team, then export the complete directory as XLSX.</p>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+                    <input type="text" id="empAllSearch" class="form-control" placeholder="Search employees…" style="max-width:280px;">
+                    <button type="button" id="exportAllEmpsBtn" class="btn-primary">⬇ Export All Employees (XLSX)</button>
+                </div>
+                <div id="exportAllEmpMsg" class="message" style="display:none;margin-top:8px;"></div>
+                <div id="empAllTableWrap" style="margin-top:16px;overflow-x:auto;"></div>
+            </div>
+        </div>
+
+        <!-- ══ Attendance Records ══ -->
+        <div class="admin-panel">
+            <h2>Attendance Records <span class="admin-badge">Admin</span></h2>
+            <div class="adm-mode-tabs">
+                <button class="adm-mode-tab adm-mode-active" id="attModeTabSingle">Single Employee</button>
+                <button class="adm-mode-tab" id="attModeTabAll">All Employees</button>
+            </div>
+
+            <!-- Single employee attendance -->
+            <div id="attModeSingle">
+                <p class="csv-hint">Select an employee and month to view their attendance log and download as XLSX.</p>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+                    <select id="attEmpSelect" class="form-control" style="max-width:280px;">
+                        <option value="">— Select employee —</option>
+                    </select>
+                    <input type="month" id="attMonth" class="form-control" style="max-width:160px;">
+                    <button type="button" id="attViewBtn" class="btn-primary">View</button>
+                    <button type="button" id="attExportSingleBtn" class="btn-secondary">⬇ Export XLSX</button>
+                </div>
+                <div id="attSingleMsg" class="message" style="display:none;margin-top:8px;"></div>
+                <div id="attSingleTable" style="margin-top:16px;overflow-x:auto;"></div>
+            </div>
+
+            <!-- All employees attendance -->
+            <div id="attModeAll" style="display:none;">
+                <!-- Sub-tabs -->
+                <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:16px;">
+                    <button id="attAllTabDay"   type="button" class="exp-tab-btn exp-tab-active">Day-wise</button>
+                    <button id="attAllTabMonth" type="button" class="exp-tab-btn">Monthly Summary</button>
+                </div>
+
+                <!-- Day-wise sub-panel -->
+                <div id="attAllPanelDay">
+                    <p class="csv-hint">All employees' attendance for a single date — view on screen and export as XLSX.</p>
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+                        <input type="date" id="attAllDate" class="form-control" style="max-width:180px;">
+                        <button type="button" id="attAllDayViewBtn" class="btn-primary">View</button>
+                        <button type="button" id="attAllDayExportBtn" class="btn-secondary">⬇ Export XLSX</button>
+                    </div>
+                    <div id="attAllDayTable" style="margin-top:16px;overflow-x:auto;"></div>
+                </div>
+
+                <!-- Monthly summary sub-panel -->
+                <div id="attAllPanelMonth" style="display:none;">
+                    <p class="csv-hint">Summary of all employees for a selected month — days present and total hours. Export the full detail as XLSX.</p>
+                    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;">
+                        <input type="month" id="attAllMonth" class="form-control" style="max-width:160px;">
+                        <button type="button" id="attAllMonthViewBtn" class="btn-primary">View Summary</button>
+                        <button type="button" id="attAllMonthExportBtn" class="btn-secondary">⬇ Export Full XLSX</button>
+                    </div>
+                    <div id="attAllMonthTable" style="margin-top:16px;overflow-x:auto;"></div>
+                </div>
+            </div>
+
+            <div id="attMsg" class="message" style="display:none;margin-top:8px;"></div>
+        </div>
+
+        <!-- Attendance upload -->
+        <div class="admin-panel">
+            <h2>Upload attendance <span class="admin-badge">Admin</span></h2>
+            <div id="dashboardAdminMessage" class="message" style="display: none;"></div>
+            <p class="csv-hint">Columns: <code>EmployeeID</code>, <code>Date</code>, <code>LoginTime</code>, <code>LogoutTime</code>, <code>TotalHours</code>, <code>CreatedAt</code></p>
+            <form id="attendanceUploadForm">
+                <input type="file" id="attendanceFile" accept=".csv,.xlsx,.xls" class="form-control" style="max-width: 400px;">
+                <button type="submit" class="btn-primary" style="margin-top: 12px;">Upload attendance</button>
+            </form>
+            <p class="csv-hint"><a href="sample-attendance.csv" download>Download sample template</a></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Global Vision Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/announcements-board.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
+

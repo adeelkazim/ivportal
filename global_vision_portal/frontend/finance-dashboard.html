@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard — Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+    <style>
+        .fin-stats {
+            display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px;
+        }
+        .fin-stat {
+            flex: 1; min-width: 140px;
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+            padding: 18px 20px; text-align: center;
+            box-shadow: 0 1px 4px rgba(15,23,42,.06);
+        }
+        .fin-stat .num  { font-size: 28px; font-weight: 900; line-height: 1; color: #0f172a; }
+        .fin-stat .lbl  { font-size: 11px; color: #64748b; margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+        .fin-stat.danger .num  { color: #dc2626; }
+        .fin-stat.success .num { color: #16a34a; }
+        .fin-stat.info .num    { color: #2555c4; }
+        .fin-stat.warn .num    { color: #d97706; }
+
+        .fin-tabs {
+            display: flex; gap: 4px; border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .fin-tab {
+            padding: 9px 22px; font-size: 13px; font-weight: 600; cursor: pointer;
+            border: none; background: none; color: #64748b;
+            border-bottom: 3px solid transparent; margin-bottom: -2px;
+            transition: color .15s, border-color .15s;
+        }
+        .fin-tab.active { color: #2555c4; border-bottom-color: #2555c4; }
+
+        .fin-panel { display: none; }
+        .fin-panel.active { display: block; }
+
+        .fin-toolbar {
+            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px;
+        }
+        .fin-toolbar input { flex: 1; min-width: 200px; }
+
+        .fin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .fin-table th { background: #f8fafc; font-size: 11.5px; font-weight: 700; color: #64748b;
+                         text-transform: uppercase; letter-spacing: .3px; padding: 10px 12px;
+                         border-bottom: 1.5px solid #e2e8f0; white-space: nowrap; }
+        .fin-table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .fin-table tr:hover td { background: #f8fafc; }
+
+        .status-badge {
+            display: inline-block; padding: 2px 9px; border-radius: 20px;
+            font-size: 10.5px; font-weight: 700;
+        }
+        .status-active    { background: #dcfce7; color: #166534; }
+        .status-paid      { background: #dbeafe; color: #1e40af; }
+        .status-cancelled { background: #f1f5f9; color: #64748b; }
+
+        .fin-amount { font-variant-numeric: tabular-nums; font-weight: 600; }
+        .fin-amount.outstanding { color: #dc2626; }
+        .fin-amount.paid        { color: #16a34a; }
+
+        .btn-icon {
+            padding: 5px 10px; border-radius: 7px; border: 1.5px solid;
+            cursor: pointer; font-size: 13px; background: none; transition: background .15s;
+        }
+        .btn-icon.edit   { border-color: #93c5fd; color: #1d4ed8; }
+        .btn-icon.edit:hover { background: #eff6ff; }
+        .btn-icon.cancel { border-color: #fca5a5; color: #dc2626; }
+        .btn-icon.cancel:hover { background: #fff1f2; }
+
+        /* Loan modal */
+        .fin-modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 580px) { .fin-modal-body { grid-template-columns: 1fr; } }
+        .fin-modal-body .full { grid-column: 1 / -1; }
+    </style>
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>💰 Finance Dashboard <span class="admin-hero-badge">Finance</span></h1>
+                <p>Manage employee loans and medical balance allocations. Visible only to Finance Manager and Admin.</p>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="fin-stats" id="finStats">
+            <div class="fin-stat info">  <div class="num" id="fsTotalLoans">—</div>   <div class="lbl">Total Loans</div></div>
+            <div class="fin-stat warn">  <div class="num" id="fsActiveLoans">—</div>  <div class="lbl">Active Loans</div></div>
+            <div class="fin-stat danger"><div class="num" id="fsOutstanding">—</div>  <div class="lbl">Outstanding (PKR)</div></div>
+            <div class="fin-stat success"><div class="num" id="fsTotalPaid">—</div>   <div class="lbl">Recovered (PKR)</div></div>
+            <div class="fin-stat info">  <div class="num" id="fsMedTotal">—</div>     <div class="lbl">Medical Fund (PKR)</div></div>
+        </div>
+
+        <div id="finMessage" class="message" style="display:none;margin-bottom:14px;"></div>
+
+        <!-- Tabs -->
+        <div class="fin-tabs">
+            <button class="fin-tab active" data-tab="loans">📋 Loans</button>
+            <button class="fin-tab" data-tab="medical">🏥 Medical Balances</button>
+        </div>
+
+        <!-- Loans Panel -->
+        <div class="fin-panel active" id="panLoans">
+            <div class="fin-toolbar">
+                <input type="text" id="loanSearch" class="form-control" placeholder="Search employee…" style="max-width:260px;">
+                <select id="loanStatusFilter" class="form-control" style="max-width:150px;">
+                    <option value="">All statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <button type="button" class="admin-btn-primary" id="btnAddLoan">+ New Loan</button>
+                <button type="button" class="admin-btn-ghost" id="btnExportFinance" style="margin-left:auto;">⬇ Export XLSX</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="fin-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th><th>Team</th><th>Loan (PKR)</th>
+                            <th>Paid (PKR)</th><th>Remaining (PKR)</th>
+                            <th>Purpose</th><th>Issued</th><th>Due</th>
+                            <th>Status</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loanTableBody"><tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:24px;">Loading…</td></tr></tbody>
+                </table>
+            </div>
+            <p id="loanCount" style="font-size:12px;color:#94a3b8;margin-top:8px;"></p>
+        </div>
+
+        <!-- Medical Balances Panel -->
+        <div class="fin-panel" id="panMedical">
+            <div class="fin-toolbar">
+                <input type="text" id="medSearch" class="form-control" placeholder="Search employee…" style="max-width:260px;">
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="fin-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th><th>Designation</th><th>Team</th>
+                            <th>Medical Balance (PKR)</th><th>Loan Balance (PKR)</th>
+                            <th>Last Updated</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medTableBody"><tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:24px;">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Modal (Add / Edit) -->
+    <div id="loanModal" class="modal">
+        <div class="modal-content admin-modal" style="max-width:580px;">
+            <h2 id="loanModalTitle">New Loan</h2>
+            <form id="loanForm">
+                <input type="hidden" id="loanId">
+                <div class="fin-modal-body">
+                    <div class="form-group">
+                        <label>Employee *</label>
+                        <select id="loanEmpSelect" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Loan Amount (PKR) *</label>
+                        <input type="number" id="loanAmount" class="form-control" min="1" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount Paid (PKR)</label>
+                        <input type="number" id="loanPaid" class="form-control" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="loanStatus" class="form-control">
+                            <option value="Active">Active</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Issued Date</label>
+                        <input type="date" id="loanIssued" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Due Date</label>
+                        <input type="date" id="loanDue" class="form-control">
+                    </div>
+                    <div class="form-group full">
+                        <label>Purpose</label>
+                        <input type="text" id="loanPurpose" class="form-control" placeholder="e.g. Medical emergency, Home repair…">
+                    </div>
+                    <div class="form-group full">
+                        <label>Notes</label>
+                        <textarea id="loanNotes" class="form-control" rows="2" style="resize:vertical;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelLoan">Cancel</button>
+                    <button type="submit" class="admin-btn-primary" id="btnSaveLoan">Save Loan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Medical Balance Edit Modal -->
+    <div id="medModal" class="modal">
+        <div class="modal-content admin-modal" style="max-width:420px;">
+            <h2>Edit Balance — <span id="medModalName"></span></h2>
+            <form id="medForm">
+                <input type="hidden" id="medEmpId">
+                <div class="form-group">
+                    <label>Medical Balance (PKR)</label>
+                    <input type="number" id="medBalance" class="form-control" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Loan Balance (PKR)</label>
+                    <input type="number" id="medLoanBalance" class="form-control" min="0" step="0.01">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelMed">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/finance-dashboard.js"></script>
+</body>
+</html>

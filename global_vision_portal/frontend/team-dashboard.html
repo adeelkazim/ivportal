@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Dashboard — Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <style>
+        /* ── Header ── */
+        .td-header {
+            display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .td-header h1 { font-size: 22px; font-weight: 800; color: #0f172a; margin: 0; flex: 1; min-width: 0; }
+
+        /* ── Controls bar ── */
+        .td-controls {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .td-team-select { max-width: 220px; }
+        .td-date-input  { max-width: 180px; }
+
+        /* ── Stat row ── */
+        .td-stats {
+            display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
+        }
+        .td-stat {
+            flex: 1; min-width: 110px; max-width: 160px;
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 14px 16px; text-align: center;
+            box-shadow: 0 1px 4px rgba(15,23,42,.05);
+        }
+        .td-stat .num { font-size: 28px; font-weight: 900; line-height: 1; }
+        .td-stat .lbl { font-size: 11px; font-weight: 700; color: #64748b; margin-top: 5px; text-transform: uppercase; letter-spacing: .4px; }
+        .stat-ontime  .num { color: #16a34a; }
+        .stat-late    .num { color: #d97706; }
+        .stat-absent  .num { color: #dc2626; }
+        .stat-total   .num { color: #2555c4; }
+
+        /* ── Table ── */
+        .td-table-wrap { overflow-x: auto; }
+        .td-table {
+            width: 100%; border-collapse: collapse; font-size: 13px; min-width: 740px;
+        }
+        .td-table th {
+            background: #f8fafc; font-size: 10.5px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .5px; color: #64748b;
+            padding: 10px 14px; text-align: left; border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .td-table td {
+            padding: 12px 14px; border-bottom: 1px solid #f1f5f9;
+            color: #1e293b; vertical-align: middle;
+        }
+        .td-table tr:last-child td { border-bottom: none; }
+        .td-table tr:hover td { background: #fafbff; }
+
+        /* ── Status badges ── */
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+            white-space: nowrap;
+        }
+        .s-ontime  { background: #dcfce7; color: #166534; }
+        .s-late    { background: #fef3c7; color: #92400e; }
+        .s-absent  { background: #fee2e2; color: #991b1b; }
+
+        .late-by {
+            display: inline-block;
+            font-size: 10.5px; font-weight: 700;
+            background: #fee2e2; color: #991b1b;
+            padding: 1px 6px; border-radius: 10px; margin-left: 5px;
+        }
+
+        /* ── Avatar ── */
+        .td-av {
+            width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+            font-size: 13px; font-weight: 800; color: #fff;
+            display: inline-flex; align-items: center; justify-content: center;
+            vertical-align: middle; margin-right: 8px;
+        }
+        .td-name-cell { display: flex; align-items: center; }
+        .td-name  { font-weight: 700; color: #0f172a; }
+        .td-sub   { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+
+        /* ── Time ── */
+        .td-time { font-variant-numeric: tabular-nums; font-weight: 600; }
+        .td-shift { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+        /* ── Remark cell ── */
+        .remark-preview {
+            font-size: 12px; color: #475569; max-width: 180px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .remark-meta { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .remark-by   { font-size: 11px; color: #64748b; margin-top: 2px; font-style: italic; }
+        .no-remark   { font-size: 12px; color: #cbd5e1; }
+
+        /* ── Action buttons ── */
+        .btn-remark-add {
+            font-size: 12px; font-weight: 700; color: #2555c4; background: #eff4ff;
+            border: 1px solid #bfdbfe; border-radius: 7px; padding: 5px 12px;
+            cursor: pointer; white-space: nowrap; transition: background .15s;
+        }
+        .btn-remark-add:hover { background: #dbeafe; }
+        .btn-remark-edit {
+            font-size: 12px; font-weight: 700; color: #475569; background: #f1f5f9;
+            border: 1px solid #e2e8f0; border-radius: 7px; padding: 5px 12px;
+            cursor: pointer; white-space: nowrap; transition: background .15s;
+        }
+        .btn-remark-edit:hover { background: #e2e8f0; }
+
+        /* ── Remarks modal ── */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(15,23,42,.45); z-index: 1000;
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        .modal-overlay.open { display: flex; }
+        .td-modal {
+            background: #fff; border-radius: 16px; width: 100%; max-width: 480px;
+            box-shadow: 0 20px 60px rgba(15,23,42,.18); overflow: hidden;
+        }
+        .td-modal-head {
+            padding: 20px 24px 16px; border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+        }
+        .td-modal-head h3 { font-size: 16px; font-weight: 800; color: #0f172a; margin: 0 0 3px; }
+        .td-modal-head p  { font-size: 12px; color: #64748b; margin: 0; }
+        .td-modal-body { padding: 20px 24px; }
+        .td-modal-body .form-group { margin-bottom: 16px; }
+        .td-modal-body label {
+            display: block; font-size: 12px; font-weight: 700;
+            color: #374151; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .04em;
+        }
+        .td-modal-body select, .td-modal-body textarea { width: 100%; }
+        .td-modal-body textarea { resize: vertical; min-height: 100px; font-size: 13px; }
+        .td-modal-foot {
+            padding: 14px 24px 20px; display: flex; gap: 10px; justify-content: flex-end;
+            border-top: 1px solid #e2e8f0;
+        }
+        .td-modal-msg { font-size: 13px; min-height: 18px; margin-bottom: 6px; }
+        .td-modal-msg.error   { color: #dc2626; }
+        .td-modal-msg.success { color: #16a34a; }
+
+        @media (max-width: 600px) {
+            .td-stats { gap: 8px; }
+            .td-stat  { min-width: 90px; padding: 10px 12px; }
+            .td-stat .num { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="portalLayout"></div>
+    <div class="portal-page-content">
+        <div class="container" style="max-width:1100px;">
+
+            <div class="td-header">
+                <h1>Team Dashboard</h1>
+                <div id="tdDateLabel" style="font-size:13px;color:#64748b;font-weight:600;"></div>
+            </div>
+
+            <div class="td-controls">
+                <select id="tdTeamSelect" class="form-control td-team-select">
+                    <option value="">Loading teams…</option>
+                </select>
+                <input type="date" id="tdDatePicker" class="form-control td-date-input">
+                <button type="button" id="tdRefreshBtn" class="btn-primary" style="padding:8px 18px;">↻ Refresh</button>
+            </div>
+
+            <div class="td-stats">
+                <div class="td-stat stat-total">
+                    <div class="num" id="tdStatTotal">—</div>
+                    <div class="lbl">Total</div>
+                </div>
+                <div class="td-stat stat-ontime">
+                    <div class="num" id="tdStatOnTime">—</div>
+                    <div class="lbl">On Time</div>
+                </div>
+                <div class="td-stat stat-late">
+                    <div class="num" id="tdStatLate">—</div>
+                    <div class="lbl">Late</div>
+                </div>
+                <div class="td-stat stat-absent">
+                    <div class="num" id="tdStatAbsent">—</div>
+                    <div class="lbl">Absent</div>
+                </div>
+            </div>
+
+            <div id="tdMessage" class="message" style="display:none;margin-bottom:14px;"></div>
+
+            <div class="td-table-wrap">
+                <table class="td-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Shift</th>
+                            <th>Clock-in</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tdTableBody">
+                        <tr><td colspan="6" style="text-align:center;padding:48px;color:#94a3b8;">Select a team to load data.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal. All rights reserved.</p></footer>
+
+    <!-- Remarks modal -->
+    <div class="modal-overlay" id="tdRemarkModal" role="dialog" aria-modal="true" aria-labelledby="tdModalTitle">
+        <div class="td-modal">
+            <div class="td-modal-head">
+                <h3 id="tdModalTitle">Add Remark</h3>
+                <p id="tdModalSubtitle"></p>
+            </div>
+            <div class="td-modal-body">
+                <div class="td-modal-msg" id="tdModalMsg"></div>
+
+                <div class="form-group">
+                    <label for="tdModalTeam">Team</label>
+                    <select id="tdModalTeam" class="form-control">
+                        <option value="">— Select team (optional) —</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tdModalClient">Client</label>
+                    <select id="tdModalClient" class="form-control">
+                        <option value="">— Select client (optional) —</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tdModalReason">Reason <span style="color:#dc2626;">*</span></label>
+                    <textarea id="tdModalReason" class="form-control" placeholder="Describe why the employee was late…"></textarea>
+                </div>
+            </div>
+            <div class="td-modal-foot">
+                <button type="button" id="tdModalCancel" class="admin-btn-ghost" style="padding:8px 18px;">Cancel</button>
+                <button type="button" id="tdModalSave"   class="btn-primary"    style="padding:8px 22px;">Save Remark</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/team-dashboard.js"></script>
+</body>
+</html>

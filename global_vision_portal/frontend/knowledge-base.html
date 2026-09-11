@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Knowledge Base</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+</head>
+<body>
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>Knowledge Base</h1>
+            <p>Find solutions to common problems</p>
+        </div>
+
+        <!-- Knowledge Base Submission Form -->
+        <div class="kb-form-card">
+            <h2>Add New Knowledge Base Entry</h2>
+            <form id="kbSubmitForm">
+                <div class="form-group">
+                    <label for="kbTitle">Title</label>
+                    <input type="text" id="kbTitle" name="kbTitle" required placeholder="Enter a short title">
+                </div>
+                <div class="form-group">
+                    <label for="kbCategory">Category</label>
+                    <select id="kbCategory" name="kbCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="Password">Password</option>
+                        <option value="Network">Network</option>
+                        <option value="Software">Software</option>
+                        <option value="Hardware">Hardware</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="kbProblem">Problem (Rich Text)</label>
+                    <div id="kbProblem" class="rtf-input" contenteditable="true" required></div>
+                </div>
+                <div class="form-group">
+                    <label for="kbSolution">Solution (Rich Text)</label>
+                    <div id="kbSolution" class="rtf-input" contenteditable="true" required></div>
+                </div>
+                <div class="form-group">
+                    <label>Submitted By</label>
+                    <input type="text" id="kbSubmittedBy" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="text" id="kbDate" readonly>
+                </div>
+                <button type="submit" class="btn-primary">Submit to Knowledge Base</button>
+                <div id="kbSubmitMessage" class="message"></div>
+            </form>
+        </div>
+
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-box" 
+                placeholder="Search problems and solutions..."
+            >
+        </div>
+
+        <div class="filter-bar">
+            <select id="categoryFilter" class="filter-select">
+                <option value="">All Categories</option>
+                <option value="Password">Password</option>
+                <option value="Network">Network</option>
+                <option value="Software">Software</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div id="kbContainer" class="kb-grid">
+            <p class="text-center">Loading knowledge base...</p>
+        </div>
+    </div>
+
+    <!-- KB Article Modal -->
+    <div id="kbModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            
+            <h2 id="modalTitle"></h2>
+            <p class="kb-category" id="modalCategory"></p>
+
+            <h3>Problem</h3>
+            <p id="modalProblem"></p>
+
+            <h3>Solution</h3>
+            <p id="modalSolution"></p>
+
+            <p class="kb-meta">
+                <small>Added by: <span id="modalAuthor"></span> | Views: <span id="modalViews"></span></small>
+            </p>
+
+            <button id="modalCloseBtn" class="btn-secondary">Close</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Global Vision Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/knowledge-base.js"></script>
+</body>
+</html>
+

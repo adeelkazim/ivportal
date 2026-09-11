@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Today — Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <style>
+        .pt-header {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .pt-header h1 { font-size: 22px; font-weight: 800; color: #0f172a; margin: 0; flex: 1; }
+        .pt-stats {
+            display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px;
+        }
+        .pt-stat {
+            flex: 1; min-width: 130px; max-width: 200px;
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+            padding: 18px 20px; text-align: center;
+            box-shadow: 0 1px 4px rgba(15,23,42,.06);
+        }
+        .pt-stat .num { font-size: 32px; font-weight: 900; line-height: 1; }
+        .pt-stat .lbl { font-size: 12px; color: #64748b; margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+        .pt-stat.present .num  { color: #16a34a; }
+        .pt-stat.active .num   { color: #2555c4; }
+        .pt-stat.absent .num   { color: #dc2626; }
+
+        .pt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+        .pt-card {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+            padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 1px 4px rgba(15,23,42,.06);
+            transition: box-shadow .18s;
+        }
+        .pt-card:hover { box-shadow: 0 4px 14px rgba(15,23,42,.11); }
+        .pt-avatar {
+            width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+            font-size: 17px; font-weight: 800; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pt-info { flex: 1; min-width: 0; }
+        .pt-name { font-size: 14px; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pt-role { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+        .pt-time { font-size: 12px; color: #1e40af; margin-top: 4px; font-weight: 600; }
+        .pt-badge {
+            font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .badge-active   { background: #dcfce7; color: #166534; }
+        .badge-present  { background: #dbeafe; color: #1e40af; }
+        .badge-absent   { background: #fee2e2; color: #991b1b; }
+
+        .pt-section-title {
+            font-size: 13px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: .5px; color: #64748b; margin: 24px 0 10px;
+        }
+        .pt-search {
+            max-width: 320px; margin-bottom: 20px;
+        }
+        @media (max-width: 600px) {
+            .pt-grid { grid-template-columns: 1fr; }
+            .pt-stat .num { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="portalLayout"></div>
+
+    <div class="portal-page-content">
+        <div class="container" style="max-width:1100px;">
+            <div class="pt-header">
+                <a href="admin-dashboard.html" style="font-size:13px;color:#2555c4;font-weight:600;text-decoration:none;">← Admin Dashboard</a>
+                <h1>Present Today</h1>
+                <div id="ptDateLabel" style="font-size:13px;color:#64748b;font-weight:600;"></div>
+                <button type="button" id="ptRefreshBtn" class="btn-primary" style="padding:8px 18px;">↻ Refresh</button>
+            </div>
+
+            <div class="pt-stats" id="ptStats">
+                <div class="pt-stat present"><div class="num" id="ptTotal">—</div><div class="lbl">Present Today</div></div>
+                <div class="pt-stat active"><div class="num" id="ptActive">—</div><div class="lbl">Still In</div></div>
+                <div class="pt-stat absent"><div class="num" id="ptAbsent">—</div><div class="lbl">Absent</div></div>
+            </div>
+
+            <input type="text" id="ptSearch" class="form-control pt-search" placeholder="Search by name…">
+            <div id="ptMessage" class="message" style="display:none;"></div>
+            <div id="ptContainer"><div style="text-align:center;padding:48px;color:#94a3b8;">Loading…</div></div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal. All rights reserved.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-present-today.js"></script>
+</body>
+</html>

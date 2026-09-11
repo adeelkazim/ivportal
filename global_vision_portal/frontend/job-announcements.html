@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Announcements - Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>Internal Job Announcements</h1>
+                <p>Browse openings and promotions by department.</p>
+            </div>
+        </header>
+        <div class="admin-panel">
+            <div class="admin-panel-header">
+                <h2>Open positions</h2>
+                <div class="admin-actions-row">
+                    <input type="text" id="jobSearch" class="admin-search" placeholder="Search title or description…">
+                    <select id="jobDept" class="form-control" style="max-width:200px;"><option value="">All departments</option></select>
+                    <button type="button" class="admin-btn-ghost" id="jobFilterBtn">Apply</button>
+                </div>
+            </div>
+            <div class="admin-panel-body admin-ann-grid" id="jobList"><p>Loading…</p></div>
+        </div>
+    </div>
+    <!-- Recommend Someone Modal -->
+    <div id="recommendModal" class="modal" style="display:none;">
+        <div class="modal-content admin-modal admin-modal-pro" style="max-width:540px;">
+            <h2>Recommend Someone</h2>
+            <p id="recommendJobTitle" style="font-size:13px;color:#64748b;margin:-8px 0 16px;"></p>
+            <form id="recommendForm" novalidate>
+                <input type="hidden" id="recommendJobId">
+                <div class="signup-grid">
+                    <div class="form-group">
+                        <label>Candidate Name <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="recName" class="form-control" placeholder="Full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="recFatherName" class="form-control" placeholder="Father's full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number <span style="color:#ef4444;">*</span></label>
+                        <input type="tel" id="recContact" class="form-control" placeholder="+92 3xx xxxxxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span style="font-size:11px;color:#94a3b8;">(optional)</span></label>
+                        <input type="email" id="recEmail" class="form-control" placeholder="candidate@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>LinkedIn Profile <span style="font-size:11px;color:#94a3b8;">(optional)</span></label>
+                        <input type="url" id="recLinkedIn" class="form-control" placeholder="https://linkedin.com/in/…">
+                    </div>
+                    <div class="form-group">
+                        <label>Recommended By <span style="font-size:11px;color:#94a3b8;">(optional — leave blank to use your name)</span></label>
+                        <input type="text" id="recRecommendedBy" class="form-control" placeholder="Your name or relationship">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:12px;">
+                    <label>Candidate CV <span style="font-size:11px;color:#94a3b8;">(optional — PDF or Word, max 10 MB)</span></label>
+                    <input type="file" id="recCvFile" class="form-control" accept=".pdf,.doc,.docx"
+                        style="padding:6px;font-size:13px;">
+                    <div id="recCvName" style="font-size:12px;color:#64748b;margin-top:4px;display:none;"></div>
+                </div>
+                <div id="recommendMsg" class="message" style="display:none;margin-top:12px;"></div>
+                <div class="modal-actions" style="margin-top:16px;">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelRecommend">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Submit Recommendation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/job-announcements.js"></script>
+</body>
+</html>
+
+

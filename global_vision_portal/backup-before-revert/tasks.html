@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Vision Portal - Tasks</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Global Vision Portal</div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="profile.html" class="nav-link">Profile</a></li>
+                <li><a href="tasks.html" class="nav-link active">Tasks</a></li>
+                <li><a href="inventory.html" class="nav-link">Inventory</a></li>
+                <li><a href="knowledge-base.html" class="nav-link">Knowledge Base</a></li>
+                <li><a href="#logout" class="nav-link" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Task Management</h1>
+        </div>
+
+        <div id="adminTasksPanel" class="admin-panel" style="display: none;">
+            <h2>Assign task to employee <span class="admin-badge" id="assignRoleBadge">Manager</span></h2>
+            <div id="taskAssignMessage" class="message" style="display: none;"></div>
+            <form id="assignTaskForm">
+                <div class="admin-grid">
+                    <div class="form-group">
+                        <label for="assignTitle">Title</label>
+                        <input type="text" id="assignTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignEmployee">Assign to</label>
+                        <select id="assignEmployee" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignPriority">Priority</label>
+                        <select id="assignPriority" class="form-control">
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assignDeadline">Deadline</label>
+                        <input type="date" id="assignDeadline" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 12px;">
+                    <label for="assignDescription">Description</label>
+                    <textarea id="assignDescription" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 12px;">Assign task</button>
+            </form>
+        </div>
+
+        <div id="taskMessage" class="message" style="display: none;"></div>
+
+        <div class="filter-bar">
+            <select id="statusFilter" class="filter-select">
+                <option value="">All Tasks</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="On Hold">On Hold</option>
+            </select>
+
+            <select id="priorityFilter" class="filter-select">
+                <option value="">All Priorities</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+        </div>
+
+        <div id="tasksContainer" class="tasks-grid">
+            <p class="text-center">Loading tasks...</p>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTaskTitle">Task Details</h2>
+            
+            <div class="form-group">
+                <label>Title</label>
+                <p id="modalTitle"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <p id="modalDescription"></p>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="modalStatus" class="form-control">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="On Hold">On Hold</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Priority</label>
+                    <p id="modalPriority"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Deadline</label>
+                <p id="modalDeadline"></p>
+            </div>
+
+            <button id="modalUpdateBtn" class="btn-primary">Update Status</button>
+            <button id="modalCloseBtn" class="btn-secondary">Close</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Global Vision Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script src="js/tasks.js"></script>
+</body>
+</html>

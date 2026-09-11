@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Balances - Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+    <style>
+        .balance-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .balance-card-tile {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        }
+        .balance-card-tile .bc-icon { font-size: 28px; line-height: 1; }
+        .balance-card-tile .bc-label { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+        .balance-card-tile .bc-amount { font-size: 24px; font-weight: 800; color: #1e293b; }
+        .balance-card-tile .bc-meta { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .balance-card-tile.is-deduction { background: linear-gradient(180deg, #fff5f5 0%, #ffffff 60%); }
+        .balance-card-tile.is-deduction .bc-amount { color: #dc2626; }
+        .balance-card-tile .bc-type-tag {
+            display: inline-block;
+            font-size: 10px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+            padding: 2px 7px; border-radius: 4px; margin-top: 2px;
+        }
+        .bc-type-tag.allowance { background: #dcfce7; color: #16a34a; }
+        .bc-type-tag.deduction { background: #fee2e2; color: #dc2626; }
+    </style>
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>My Balances</h1>
+                <p>Your allocated balances. HR/Finance updates these periodically.</p>
+            </div>
+        </header>
+        <div id="medMessage" class="message" style="display:none;"></div>
+
+        <div class="admin-panel" id="myBalancesPanel">
+            <div class="admin-panel-header"><h2>All Balances</h2></div>
+            <div class="admin-panel-body">
+                <div class="balance-cards-grid" id="myBalancesGrid"></div>
+                <p class="csv-hint" style="margin-top:16px;">Contact your administrator if something looks wrong.</p>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/medical-balance.js"></script>
+</body>
+</html>

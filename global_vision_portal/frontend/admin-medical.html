@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Balances - Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+    <style>
+        .card-type-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+        .card-type-row:last-child { border-bottom: none; }
+        .card-type-row .ct-icon { font-size: 20px; min-width: 28px; text-align: center; }
+        .card-type-row .ct-label { flex: 1; font-size: 14px; font-weight: 600; color: #1e293b; }
+
+        /* Overview table horizontal scroll */
+        .overview-wrap { overflow-x: auto; }
+        .overview-table th, .overview-table td {
+            white-space: nowrap;
+            padding: 8px 12px;
+        }
+        .overview-table th { background: #f8fafc; font-size: 12px; font-weight: 700; color: #64748b; }
+        .overview-table td.amount-cell { /* text-align: right; */ font-variant-numeric: tabular-nums; }
+        .overview-table td.zero { color: #cbd5e1; }
+    </style>
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>Manage balances (Allowances and Deductions)</h1>
+                <p>Set medical balances and custom allowance cards for employees.</p>
+            </div>
+        </header>
+        <div id="adminMedMsg" class="message" style="display:none;"></div>
+
+        <!-- ── Tab bar ─────────────────────────────────────────────── -->
+        <div style="display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e2e8f0;">
+            <button type="button" class="admin-tab-btn active" data-tab="tabMedical">Balances</button>
+            <button type="button" class="admin-tab-btn" data-tab="tabCards">Custom Cards</button>
+            <button type="button" class="admin-tab-btn" data-tab="tabOverview">Overview</button>
+        </div>
+
+        <!-- ── TAB 1: Medical Balance ─────────────────────────────── -->
+        <div id="tabMedical">
+            <div class="admin-panel">
+                <div class="admin-panel-header"><h2>Balance — All Employees</h2></div>
+                <div class="admin-panel-body">
+                    <form id="adminUploadForm" class="admin-actions-row" style="flex-wrap:wrap;gap:12px;margin-bottom:4px;">
+                        <input type="file" id="adminUploadFile" accept=".xlsx,.xls,.csv" class="form-control" style="max-width:320px;">
+                        <button type="submit" class="admin-btn-primary">Bulk upload XLSX / CSV</button>
+                    </form>
+                    <p class="csv-hint" style="margin-bottom:16px;">
+                        CSV columns: <strong>EmployeeID</strong> (required) · <strong>Balance</strong> · <strong>LoanBalance</strong> · <strong>LeavesRemaining</strong>
+                        — leave any column empty to keep its existing value.
+                        <a href="sample-medical-balance.csv" download style="margin-left:6px;">Download sample CSV</a>
+                    </p>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>ID</th>
+                                    <th>Medical Balance (PKR)</th>
+                                    <th>Loan Balance (PKR)</th>
+                                    <th>Leave this year (days)</th>
+                                    <th>Last Updated</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="medTableBody">
+                                <tr><td colspan="7" style="color:#94a3b8;">Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── TAB 2: Custom Cards ────────────────────────────────── -->
+        <div id="tabCards" style="display:none;">
+            <div class="admin-panel">
+                <div class="admin-panel-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <h2>Custom Balance Cards</h2>
+                    <button type="button" class="admin-btn-primary" id="btnAddCardType">+ Add Card</button>
+                </div>
+                <div class="admin-panel-body">
+                    <p class="csv-hint" style="margin-bottom:16px;">
+                        Create cards like Travel Allowance, Fuel, etc. Use simple symbols (★ ✈ ⛽ ⚕ ☂ ♥ ✦) for icons.
+                    </p>
+                    <div id="cardMsg" class="message" style="display:none;margin-bottom:12px;"></div>
+
+                    <!-- Add form -->
+                    <div id="addCardForm" style="display:none;background:#f8fafc;border:1.5px dashed #bfdbfe;border-radius:10px;padding:16px;margin-bottom:16px;">
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">
+                            <div>
+                                <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px;">Icon</label>
+                                <input type="text" id="newCardIcon" class="form-control" value="★" maxlength="4"
+                                    style="width:56px;text-align:center;font-size:18px;">
+                            </div>
+                            <div style="flex:1;min-width:160px;">
+                                <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px;">Label *</label>
+                                <input type="text" id="newCardLabel" class="form-control" placeholder="e.g. Travel Allowance">
+                            </div>
+                            <div>
+                                <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px;">Color</label>
+                                <input type="color" id="newCardColor" value="#3b82f6"
+                                    style="width:48px;height:38px;border:1.5px solid #e2e8f0;border-radius:6px;cursor:pointer;padding:2px;">
+                            </div>
+                            <div>
+                                <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px;">Unit</label>
+                                <select id="newCardUnit" class="form-control" style="width:90px;">
+                                    <option value="PKR">PKR (₨)</option>
+                                    <option value="Days">Days</option>
+                                </select>
+                            </div>
+                            <div style="display:flex;align-items:flex-end;padding-bottom:6px;">
+                                <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#374151;cursor:pointer;">
+                                    <input type="checkbox" id="newCardIsDeduction" style="width:15px;height:15px;">
+                                    Deduction
+                                </label>
+                            </div>
+                            <button type="button" class="admin-btn-primary" id="btnSaveCard">Save</button>
+                            <button type="button" class="admin-btn-ghost" id="btnCancelCard">Cancel</button>
+                        </div>
+                    </div>
+
+                    <!-- Card list -->
+                    <div id="cardTypesList"></div>
+
+                    <!-- Per-employee amounts panel -->
+                    <div id="cardValuesSection" style="display:none;margin-top:24px;border-top:2px solid #e2e8f0;padding-top:20px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                            <h3 id="cardValuesTitle" style="font-size:15px;font-weight:700;color:#1e293b;margin:0;"></h3>
+                            <button type="button" class="admin-link-btn" id="btnCloseValues">✕ Close</button>
+                        </div>
+                        <div class="admin-table-wrap">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr><th>Employee</th><th>Amount</th><th>Last Updated</th><th></th></tr>
+                                </thead>
+                                <tbody id="cardValuesBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── TAB 3: Overview ────────────────────────────────────── -->
+        <div id="tabOverview" style="display:none;">
+            <div class="admin-panel">
+                <div class="admin-panel-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                    <h2>Balance Overview — All Employees</h2>
+                    <button type="button" class="admin-link-btn" id="btnRefreshOverview">Refresh</button>
+                </div>
+                <div class="admin-panel-body">
+                    <p class="csv-hint" style="margin-bottom:12px;">
+                        Shows every active balance (Medical + custom cards) currently visible to each employee.
+                    </p>
+                    <div class="overview-wrap">
+                        <table class="admin-table overview-table" id="overviewTable">
+                            <thead><tr id="overviewHead"></tr></thead>
+                            <tbody id="overviewBody">
+                                <tr><td colspan="2" style="color:#94a3b8;">Loading…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-medical.js"></script>
+</body>
+</html>

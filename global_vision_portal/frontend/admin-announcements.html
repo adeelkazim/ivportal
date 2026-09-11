@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements - Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1> Announcements <span class="admin-hero-badge">Admin</span></h1>
+                <p>Send to everyone, specific roles (e.g. Manager), or hand-picked people. Active messages appear on their dashboards.</p>
+            </div>
+        </header>
+
+        <div class="admin-stats" id="annStats">
+            <div class="admin-stat-card"><div class="label">Total</div><div class="value" id="statTotal">—</div></div>
+            <div class="admin-stat-card"><div class="label">Active</div><div class="value" id="statActive">—</div></div>
+            <div class="admin-stat-card"><div class="label">All staff</div><div class="value" id="statAll">—</div></div>
+            <div class="admin-stat-card"><div class="label">By role</div><div class="value" id="statByRole">—</div></div>
+            <div class="admin-stat-card"><div class="label">Individuals</div><div class="value" id="statTargeted">—</div></div>
+        </div>
+
+        <div id="annMessage" class="message" style="display:none;"></div>
+
+        <div class="admin-panel">
+            <div class="admin-panel-header">
+                <h2>All announcements</h2>
+                <button type="button" class="admin-btn-primary" id="btnAddAnn">+ New announcement</button>
+            </div>
+            <div class="admin-panel-body">
+                <div id="annList" class="admin-ann-grid">
+                    <p class="admin-empty">Loading…</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="annModal" class="modal">
+        <div class="modal-content admin-modal admin-modal-pro">
+            <h2 id="annModalTitle">New announcement</h2>
+            <form id="annForm">
+                <input type="hidden" id="annId">
+                <div class="form-group">
+                    <label for="annTitle">Title *</label>
+                    <input type="text" id="annTitle" class="form-control" required placeholder="e.g. Office closure notice">
+                </div>
+                <div class="form-group">
+                    <label for="annBody">Message *</label>
+                    <textarea id="annBody" class="form-control" rows="4" required placeholder="Write your notice…"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Send to</label>
+                    <div class="admin-target-options">
+                        <label class="admin-target-option">
+                            <input type="radio" name="annTarget" value="all" id="annTargetAll" checked>
+                            <strong>All employees & managers</strong>
+                            <small class="text-hint" style="display:block;margin-top:4px;">Everyone (Employee, Manager, etc.)</small>
+                        </label>
+                        <label class="admin-target-option">
+                            <input type="radio" name="annTarget" value="roles" id="annTargetRoles">
+                            <strong>By role</strong>
+                            <small class="text-hint" style="display:block;margin-top:4px;">e.g. Manager, Employee</small>
+                        </label>
+                        <label class="admin-target-option">
+                            <input type="radio" name="annTarget" value="selected" id="annTargetSelected">
+                            <strong>Selected people</strong>
+                            <small class="text-hint" style="display:block;margin-top:4px;">Pick individuals (includes managers)</small>
+                        </label>
+                    </div>
+                    <div id="annRolePickerWrap" style="display:none;">
+                        <div id="annRolePicker" class="admin-employee-picker"></div>
+                    </div>
+                    <div id="annEmployeePickerWrap" style="display:none;">
+                        <p id="annSelectedHint" class="csv-hint" style="margin-bottom:8px;"></p>
+                        <input type="text" id="annEmployeeSearch" class="admin-search" placeholder="Search by name, email, or role…">
+                        <div id="annEmployeePicker" class="admin-employee-picker"></div>
+                    </div>
+                </div>
+
+                <div class="signup-grid">
+                    <div class="form-group">
+                        <label for="annCategory">Category</label>
+                        <div style="display:flex;gap:6px;">
+                            <select id="annCategory" class="form-control" style="flex:1;">
+                                <option value="">— No category —</option>
+                            </select>
+                            <button type="button" class="admin-btn-ghost" id="btnManageCategories" style="white-space:nowrap;font-size:12px;" title="Manage categories">+ Category</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="annPriority">Priority</label>
+                        <input type="number" id="annPriority" class="form-control" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="annExpires">Expiry date <span style="font-weight:400;color:#94a3b8;">(optional — hidden after this day)</span></label>
+                        <input type="date" id="annExpires" class="form-control">
+                        <small class="csv-hint">Leave empty to keep visible. A past date hides the announcement from everyone.</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><input type="checkbox" id="annActive" checked> Active (visible on dashboards)</label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="admin-btn-ghost" id="btnCancelAnn">Cancel</button>
+                    <button type="submit" class="admin-btn-primary">Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/admin-announcements.js"></script>
+</body>
+</html>
+
+

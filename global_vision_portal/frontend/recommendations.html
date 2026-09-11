@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations — Global Vision Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portal-theme.css">
+    <link rel="stylesheet" href="css/admin-pages.css">
+    <style>
+        .rec-drop-zone {
+            border: 2px dashed #cbd5e1; border-radius: 12px; padding: 36px 20px;
+            text-align: center; cursor: pointer; transition: all .2s;
+            background: #f8fafc; color: #64748b;
+        }
+        .rec-drop-zone:hover, .rec-drop-zone.drag-over {
+            border-color: #3b82f6; background: #eff6ff; color: #1d4ed8;
+        }
+        .rec-drop-zone input[type="file"] { display: none; }
+        .rec-drop-icon { font-size: 36px; margin-bottom: 10px; }
+        .rec-drop-hint { font-size: 12px; color: #94a3b8; margin-top: 6px; }
+
+        .rec-doc-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px;
+            background: #fff; margin-bottom: 8px;
+        }
+        .rec-doc-icon { font-size: 22px; flex-shrink: 0; }
+        .rec-doc-info { flex: 1; min-width: 0; }
+        .rec-doc-name { font-size: 13px; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rec-doc-meta { font-size: 11px; color: #64748b; margin-top: 2px; }
+        .rec-status-badge {
+            font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .rec-status-Pending  { background: #fef3c7; color: #92400e; }
+        .rec-status-Reviewed { background: #dcfce7; color: #166534; }
+        .rec-status-Rejected { background: #fee2e2; color: #991b1b; }
+
+        /* Admin review table */
+        .rec-admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .rec-admin-table th { text-align: left; padding: 10px 12px; background: #f8fafc; color: #475569; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; border-bottom: 2px solid #e2e8f0; }
+        .rec-admin-table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .rec-admin-table tr:hover td { background: #fafafa; }
+    </style>
+</head>
+<body class="admin-page">
+    <nav class="navbar" aria-hidden="true"></nav>
+    <div class="container">
+        <header class="admin-hero">
+            <div class="admin-hero-inner">
+                <h1>Recommendations</h1>
+                <p>Upload your CV, certifications, or supporting documents. Managers and HR can review them.</p>
+            </div>
+        </header>
+
+        <div id="recMsg" class="message" style="display:none;"></div>
+
+        <!-- Employee upload panel -->
+        <div class="admin-panel" id="employeeUploadPanel">
+            <div class="admin-panel-header">
+                <strong>Upload a Document</strong>
+            </div>
+
+            <div class="rec-drop-zone" id="dropZone">
+                <div class="rec-drop-icon">📄</div>
+                <div>Drag &amp; drop a file here, or <strong>click to browse</strong></div>
+                <div class="rec-drop-hint">Accepted: PDF, Word (.doc/.docx), Images — max 10 MB</div>
+                <input type="file" id="recFileInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            </div>
+            <div id="selectedFileName" style="font-size:12px;color:#64748b;margin-top:8px;display:none;"></div>
+            <button type="button" class="admin-btn-primary" id="btnUploadDoc" style="margin-top:12px;" disabled>
+                Upload
+            </button>
+        </div>
+
+        <!-- Employee's own uploads -->
+        <div class="admin-panel" style="margin-top:20px;">
+            <div class="admin-panel-header">
+                <strong>My Documents</strong>
+            </div>
+            <div id="myDocsList">
+                <div style="color:#94a3b8;font-size:13px;padding:16px 0;">Loading…</div>
+            </div>
+        </div>
+
+        <!-- Admin review panel (hidden for non-admins) -->
+        <div class="admin-panel" id="adminReviewPanel" style="display:none;margin-top:20px;">
+            <div class="admin-panel-header">
+                <strong>All Employee Documents</strong>
+                <span class="admin-badge">Admin / Manager</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="rec-admin-table">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>File</th>
+                            <th>Size</th>
+                            <th>Uploaded</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminDocsBody">
+                        <tr><td colspan="6" style="color:#94a3b8;">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>&copy; 2026 Global Vision Portal.</p></footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/screen-access.js"></script>
+    <script src="js/app-layout.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/recommendations.js"></script>
+</body>
+</html>
